@@ -1,0 +1,20 @@
+[
+  {
+    "nodeid":"NAT011668",
+    "nodename":"대전",
+    "mainnode":true
+  },
+  {
+    "nodeid":"NAT030057",
+    "nodename":"서대전",
+    "mainnode":true
+  },
+  {
+    "nodeid":"NAT030173",
+    "nodename":"흑석리"
+  },
+  {
+    "nodeid":"NAT011524",
+    "nodename":"신탄진"
+  }
+]

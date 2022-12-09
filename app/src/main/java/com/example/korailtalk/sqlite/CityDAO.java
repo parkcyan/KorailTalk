@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.korailtalk.data.KtData;
+
 import java.util.ArrayList;
 
 public class CityDAO extends DBHelper {
@@ -34,7 +36,7 @@ public class CityDAO extends DBHelper {
         if (cursor.getCount() == 0) {
             Thread thread = new Thread(() -> {
                 try {
-                    insert(MyDatabase.api.getCitycode());
+                    insert(KtData.api.getCitycode());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -49,7 +51,7 @@ public class CityDAO extends DBHelper {
         }
 
         while (cursor.moveToNext()) {
-            MyDatabase.cityArr.add(new CityDTO(cursor.getInt(0), cursor.getString(1)));
+            KtData.cityArr.add(new CityDTO(cursor.getInt(0), cursor.getString(1)));
         }
     }
 }

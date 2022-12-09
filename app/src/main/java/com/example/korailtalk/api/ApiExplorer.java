@@ -3,7 +3,7 @@ package com.example.korailtalk.api;
 import android.util.Log;
 
 import com.example.korailtalk.sqlite.CityDTO;
-import com.example.korailtalk.sqlite.NodeDTO;
+import com.example.korailtalk.data.NodeDTO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +53,7 @@ public class ApiExplorer {
         JSONArray itemArr = json.getJSONArray("item");
         for (int i = 0; i < itemArr.length(); i++) {
             JSONObject j = itemArr.getJSONObject(i);
-            dtoArr.add(new NodeDTO(j.getString("nodeid"), j.getString("nodename"), code));
+            //dtoArr.add(new NodeDTO(j.getString("nodeid"), j.getString("nodename"), code));
         }
         return dtoArr;
     }

@@ -1,0 +1,27 @@
+[
+  {
+    "nodeid":"NAT750781",
+    "nodename":"북울산"
+  },
+  {
+    "nodeid":"NATH13717",
+    "nodename":"울산(통도사)",
+    "mainnode":true
+  },
+  {
+    "nodeid":"NAT750560",
+    "nodename":"남창"
+  },
+  {
+    "nodeid":"NAT750653",
+    "nodename":"덕하"
+  },
+  {
+    "nodeid":"NAT750726",
+    "nodename":"태화강"
+  },
+  {
+    "nodeid":"NAT750760",
+    "nodename":"효문"
+  }
+]
