@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- tab -->
+    <style name="tabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">21sp</item>
+    </style>
+</resources>

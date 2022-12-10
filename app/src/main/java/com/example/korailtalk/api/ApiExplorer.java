@@ -2,9 +2,6 @@ package com.example.korailtalk.api;
 
 import android.util.Log;
 
-import com.example.korailtalk.sqlite.CityDTO;
-import com.example.korailtalk.data.NodeDTO;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 public class ApiExplorer {
 
@@ -23,39 +19,17 @@ public class ApiExplorer {
     private static final String ENCODE = "UTF-8";
     private static final String DATA_TYPE = "json";
 
-    public ArrayList<CityDTO> getCitycode() throws IOException, JSONException {
-        ArrayList<CityDTO> dtoArr = new ArrayList<>();
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/TrainInfoService/getCtyCodeList");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", ENCODE) + "=" + SERVICE_KEY);
-        urlBuilder.append("&" + URLEncoder.encode("_type", ENCODE) + "=" + URLEncoder.encode(DATA_TYPE, ENCODE));
-        JSONObject json = connect(urlBuilder)
-                .getJSONObject("response")
-                .getJSONObject("body")
-                .getJSONObject("items");
-        JSONArray itemArr = json.getJSONArray("item");
-        for (int i = 0; i < itemArr.length(); i++) {
-            JSONObject j = itemArr.getJSONObject(i);
-            dtoArr.add(new CityDTO(j.getInt("citycode"), j.getString("cityname")));
-        }
-        return dtoArr;
-    }
-
-    public ArrayList<NodeDTO> getNode(int code) throws IOException, JSONException {
-        ArrayList<NodeDTO> dtoArr = new ArrayList<>();
+    public JSONArray getNode(int city) throws IOException, JSONException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/TrainInfoService/getCtyAcctoTrainSttnList");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", ENCODE) + "=" + SERVICE_KEY)
+                .append("&" + URLEncoder.encode("numOfRows",ENCODE) + "=" + URLEncoder.encode("100", ENCODE))
                 .append("&" + URLEncoder.encode("_type", ENCODE) + "=" + URLEncoder.encode(DATA_TYPE, ENCODE))
-                .append("&" + URLEncoder.encode("cityCode", ENCODE) + "=" + URLEncoder.encode(Integer.toString(code), ENCODE)); /* 시/도 ID */
+                .append("&" + URLEncoder.encode("cityCode", ENCODE) + "=" + URLEncoder.encode(Integer.toString(city), ENCODE)); /* 시/도 ID */
         JSONObject json = connect(urlBuilder)
                 .getJSONObject("response")
                 .getJSONObject("body")
                 .getJSONObject("items");
-        JSONArray itemArr = json.getJSONArray("item");
-        for (int i = 0; i < itemArr.length(); i++) {
-            JSONObject j = itemArr.getJSONObject(i);
-            //dtoArr.add(new NodeDTO(j.getString("nodeid"), j.getString("nodename"), code));
-        }
-        return dtoArr;
+        return json.getJSONArray("item");
     }
 
     private static JSONObject connect(StringBuilder urlBuilder) throws IOException, JSONException {

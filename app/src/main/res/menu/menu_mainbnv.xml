@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bnv_main_tic"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_image_24"
+        android:title="승차권예매"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/bnv_main_seasontic"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_image_24"
+        android:title="할인·정기권"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/bnv_main_goods"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_image_24"
+        android:title="관광상품"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/bnv_main_checktic"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_image_24"
+        android:title="승차권확인"
+        app:showAsAction="always"/>
+</menu>

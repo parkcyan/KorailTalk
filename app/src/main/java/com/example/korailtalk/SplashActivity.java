@@ -4,26 +4,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.korailtalk.data.NodeDAO;
+import com.example.korailtalk.node.NodeDAO;
 
 public class SplashActivity extends AppCompatActivity {
+
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        loading();
-    }
-
-    private void loading() {
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            new NodeDAO(getApplicationContext()).getNode();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
-        }, 2000);
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                if (msg.what == 1) {
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
+                }
+            }
+        };
+        KtRoom ktRoom = new KtRoom(this, handler);
+        ktRoom.checkNodeTable();
     }
 
 }
