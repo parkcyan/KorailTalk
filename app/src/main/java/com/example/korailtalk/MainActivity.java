@@ -19,20 +19,17 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         bnv_main = findViewById(R.id.bnv_main);
         newFragment(R.id.container_main, new TicketingFragment());
-        bnv_main.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.bnv_main_tic) {
-                    newFragment(R.id.container_main, new TicketingFragment());
-                } else if (item.getItemId() == R.id.bnv_main_seasontic) {
+        bnv_main.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bnv_main_tic) {
+                newFragment(R.id.container_main, new TicketingFragment());
+            } else if (item.getItemId() == R.id.bnv_main_seasontic) {
 
-                } else if (item.getItemId() == R.id.bnv_main_goods) {
+            } else if (item.getItemId() == R.id.bnv_main_goods) {
 
-                } else if (item.getItemId() == R.id.bnv_main_checktic) {
+            } else if (item.getItemId() == R.id.bnv_main_checktic) {
 
-                }
-                return true;
             }
+            return true;
         });
     }
 

@@ -4,4 +4,22 @@
     <style name="tabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">21sp</item>
     </style>
+
+    <style name="tvsearchFirstLetter" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/gray2</item>
+    </style>
+
+    <style name="ivsearchFirstLetter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:src">@drawable/ic_baseline_circle_24</item>
+        <item name="android:visibility">invisible</item>
+    </style>
 </resources>
