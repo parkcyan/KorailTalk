@@ -8,10 +8,8 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.korailtalk.node.NodeDAO;
+import com.example.korailtalk.node.NodeRoom;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -30,8 +28,8 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         };
-        KtRoom ktRoom = new KtRoom(this, handler);
-        ktRoom.checkNodeTable();
+        NodeRoom nodeRoom = new NodeRoom(this, handler);
+        nodeRoom.checkNodeTable();
     }
 
 }
