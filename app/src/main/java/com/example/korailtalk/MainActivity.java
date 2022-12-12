@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.korailtalk.ticketing.TicketingFragment;
@@ -31,6 +32,11 @@ public class MainActivity extends BaseActivity {
             }
             return true;
         });
+    }
+
+    public void showBnv(boolean show) {
+        if (show) {bnv_main.setVisibility(View.VISIBLE);}
+        else bnv_main.setVisibility(View.GONE);
     }
 
     @Override

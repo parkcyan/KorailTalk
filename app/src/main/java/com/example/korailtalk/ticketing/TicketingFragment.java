@@ -1,24 +1,20 @@
 package com.example.korailtalk.ticketing;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
-import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +34,10 @@ public class TicketingFragment extends Fragment {
     private View.OnClickListener onCityClick;
     private boolean isRoundTrip = false;
     private GestureDetector detector;
+    private ImageView[] ivSfl = new ImageView[15];
+    private TextView[] tvSfl = new TextView[15];
+    private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
+            "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,10 +65,11 @@ public class TicketingFragment extends Fragment {
             }
         });
 
-        b.ivTicNodefold.setOnClickListener(view -> {
+        b.llTicNodefold.setOnClickListener(view -> {
             b.tlTic.setVisibility(View.VISIBLE);
             b.llTicHide.setVisibility(View.VISIBLE);
             b.llTic.setVisibility(View.GONE);
+            ((MainActivity) getActivity()).showBnv(true);
         });
 
         onCityClick = view -> {
@@ -85,6 +86,7 @@ public class TicketingFragment extends Fragment {
             ulClick.setLayoutParams(ulClick.getLayoutParams());
             ulNotClick.getLayoutParams().width = 0;
             ulNotClick.setLayoutParams(ulNotClick.getLayoutParams());
+            ((MainActivity) getActivity()).showBnv(false);
         };
 
         b.tvTicDep.setOnClickListener(onCityClick);
@@ -109,9 +111,15 @@ public class TicketingFragment extends Fragment {
 
         b.ivTicNodeclear.setOnClickListener(view -> b.etTicNode.setText(""));
 
-        TextView[] searchFirstLetter = {b.tvTicSfl1, b.tvTicSfl2, b.tvTicSfl3, b.tvTicSfl4,
-                b.tvTicSfl5, b.tvTicSfl6, b.tvTicSfl7, b.tvTicSfl8, b.tvTicSfl9,
-                b.tvTicSfl10, b.tvTicSfl11, b.tvTicSfl12, b.tvTicSfl13, b.tvTicSfl14, b.tvTicSfl15};
+        for (int i = 0; i < ivSfl.length; i++) {
+            ImageView iv = makeSflCircle();
+            TextView tv = makeSflText();
+            tv.setText(sfl[i]);
+            b.llTicSfl.addView(tv);
+            b.llTicSflc.addView(iv);
+            tvSfl[i] = tv;
+            ivSfl[i] = iv;
+        }
 
         detector = new GestureDetector(context, new GestureDetector.OnGestureListener() {
             float sflHeight = 0;
@@ -122,7 +130,8 @@ public class TicketingFragment extends Fragment {
                 sflHeight = b.llTicSfl.getHeight();
                 index = (int) (motionEvent.getY() / (sflHeight / 15));
                 b.rlTicDark.setVisibility(View.VISIBLE);
-                b.tvTicSfl.setText(searchFirstLetter[index].getText());
+                b.tvTicSfl.setText(tvSfl[index].getText());
+                setCircleVis(index);
                 return false;
             }
 
@@ -139,9 +148,16 @@ public class TicketingFragment extends Fragment {
             @Override
             public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
                 index = (int) (motionEvent1.getY() / (sflHeight / 15));
-                if (index >= 0 && index <= 14) b.tvTicSfl.setText(searchFirstLetter[index].getText());
-                else if (index < 0) b.tvTicSfl.setText(searchFirstLetter[0].getText());
-                else b.tvTicSfl.setText(searchFirstLetter[14].getText());
+                if (index >= 0 && index <= 14) {
+                    b.tvTicSfl.setText(tvSfl[index].getText());
+                    setCircleVis(index);
+                }
+                else if (index < 0) {
+                    b.tvTicSfl.setText(tvSfl[0].getText());
+                }
+                else {
+                    b.tvTicSfl.setText(tvSfl[14].getText());
+                }
                 return false;
             }
 
@@ -168,6 +184,35 @@ public class TicketingFragment extends Fragment {
         });
 
         return b.getRoot();
+    }
+
+    private TextView makeSflText() {
+        TextView tv = new TextView(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+        lp.weight = 1;
+        tv.setTextColor(ContextCompat.getColor(context, R.color.gray2));
+        tv.setTextSize(11);
+        tv.setGravity(Gravity.CENTER);
+        tv.setLayoutParams(lp);
+        return tv;
+    }
+
+    private ImageView makeSflCircle() {
+        ImageView iv = new ImageView(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+        lp.weight = 1;
+        lp.gravity = Gravity.CENTER;
+        iv.setVisibility(View.INVISIBLE);
+        iv.setImageResource(R.drawable.ic_baseline_circle_24);
+        iv.setLayoutParams(lp);
+        return iv;
+    }
+
+    private void setCircleVis(int index) {
+        for (int i = 0; i < ivSfl.length; i++) {
+            if (i != index) ivSfl[i].setVisibility(View.INVISIBLE);
+            else ivSfl[i].setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
