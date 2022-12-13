@@ -14,7 +14,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -68,12 +67,7 @@ public class TicketingFragment extends Fragment {
         b.tlTic.addTab(b.tlTic.newTab().setText("왕복"));
         b.tlTic.addOnTabSelectedListener(onTabSelect());
 
-        b.llTicNodefold.setOnClickListener(view -> {
-            b.tlTic.setVisibility(View.VISIBLE);
-            b.llTicHide.setVisibility(View.VISIBLE);
-            b.llTic.setVisibility(View.GONE);
-            ((MainActivity) getActivity()).showBnv(true);
-        });
+        b.llTicNodefold.setOnClickListener(view -> nodeFold());
 
         b.tvTicDep.setOnClickListener(onCityClick());
         b.tvTicArr.setOnClickListener(onCityClick());
@@ -115,21 +109,21 @@ public class TicketingFragment extends Fragment {
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 1) {
                     RecyclerView.LayoutManager lm = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                    adapter = new NodeAdapter(getLayoutInflater(), (ArrayList<Node>) msg.obj, context, fragment);
+                    adapter = new NodeAdapter(getLayoutInflater(), (ArrayList<Node>) msg.obj, fragment, false);
                     b.rvTicMain.setAdapter(adapter);
                     b.rvTicMain.setLayoutManager(lm);
                     nodeRoom.getAllNodes();
                 } else if (msg.what == 2) {
                     getAllNodes = true;
                     nodeArr = (ArrayList<Node>) msg.obj;
-                }
-                else if (msg.what == 3) {
+                } else if (msg.what == 3) {
                     getNodeCountBetween = true;
                     nodeIndexArr = (ArrayList<Integer>) msg.obj;
                 } else if (msg.what == 4) {
-                    for (Node node : (ArrayList<Node>) msg.obj) {
-                        Log.d("TAG", "handleMessage: " + node.nodename);
-                    }
+                    RecyclerView.LayoutManager lm = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                    adapter = new NodeAdapter(getLayoutInflater(), (ArrayList<Node>) msg.obj, fragment, true);
+                    b.rvTicSearch.setAdapter(adapter);
+                    b.rvTicSearch.setLayoutManager(lm);
                 }
                 if (getAllNodes && getNodeCountBetween) {
                     for (int i = 0; i < nodeIndexArr.size() - 1; i++) {
@@ -141,14 +135,15 @@ public class TicketingFragment extends Fragment {
                             arr.add(nodeArr.get(j));
                         }
                         RecyclerView rv = new RecyclerView(context);
-                        adapter = new NodeAdapter(getLayoutInflater(), arr, context, fragment);
+                        adapter = new NodeAdapter(getLayoutInflater(), arr, fragment, false);
                         rv.setAdapter(adapter);
                         rv.setLayoutManager(lm);
                         rv.setLayoutParams(lp);
                         rv.setNestedScrollingEnabled(false);
                         b.llTicNodeselect.addView(rv);
                     }
-                    getAllNodes = false; getNodeCountBetween = false;
+                    getAllNodes = false;
+                    getNodeCountBetween = false;
                 }
             }
         };
@@ -179,29 +174,21 @@ public class TicketingFragment extends Fragment {
             TextView tvNotClick = view.getId() == R.id.tv_tic_arr ? b.tvTicDep : b.tvTicArr;
             View ulClick = underlineMap.get(tvClick);
             View ulNotClick = underlineMap.get(tvNotClick);
-            b.tlTic.setVisibility(View.GONE);
-            b.llTicHide.setVisibility(View.GONE);
-            b.llTic.setVisibility(View.VISIBLE);
             tvClick.setTextColor(ContextCompat.getColor(context, R.color.main));
             tvNotClick.setTextColor(ContextCompat.getColor(context, R.color.gray2));
             ulClick.getLayoutParams().width = tvClick.getWidth();
             ulClick.setLayoutParams(ulClick.getLayoutParams());
             ulNotClick.getLayoutParams().width = 0;
             ulNotClick.setLayoutParams(ulNotClick.getLayoutParams());
-            ((MainActivity) getActivity()).showBnv(false);
             isDepArr = view.getId() == R.id.tv_tic_dep;
+            nodeExpand();
         };
     }
 
     public void citySelect(String node) {
-        if (isDepArr) {
-            b.tvTicDep.setText(node);
-            modifyUnderline(b.tvTicDep, node);
-        }
-        else {
-            b.tvTicArr.setText(node);
-            modifyUnderline(b.tvTicArr, node);
-        }
+        if (isDepArr) b.tvTicDep.setText(node);
+        else b.tvTicArr.setText(node);
+        nodeFold();
     }
 
     private TextWatcher edtTextChange() {
@@ -217,8 +204,15 @@ public class TicketingFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-                nodeRoom.searchNodes(b.etTicNode.getText().toString());
+            public void afterTextChanged(Editable edt) {
+                nodeRoom.searchNodes(edt.toString());
+                if (edt.toString().equals("")) {
+                    b.flFicNodeselect.setVisibility(View.VISIBLE);
+                    b.rvTicSearch.setVisibility(View.GONE);
+                } else {
+                    b.rvTicSearch.setVisibility(View.VISIBLE);
+                    b.flFicNodeselect.setVisibility(View.GONE);
+                }
             }
         };
     }
@@ -275,6 +269,7 @@ public class TicketingFragment extends Fragment {
     private View.OnTouchListener onSflTouch() {
         return new View.OnTouchListener() {
             final GestureDetector gesture = new GestureDetector(context, onSflScroll());
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 gesture.onTouchEvent(motionEvent);
@@ -288,17 +283,29 @@ public class TicketingFragment extends Fragment {
         };
     }
 
-    private void modifyUnderline(TextView tv, String node) {
-        View underline = underlineMap.get(tv);
-        underline.getLayoutParams().width = (int) tv.getPaint().measureText(node);
-        underline.setLayoutParams(underline.getLayoutParams());
+    private void nodeFold() {
+        b.tlTic.setVisibility(View.VISIBLE);
+        b.llTicHide.setVisibility(View.VISIBLE);
+        b.tvTicDep.setTextColor(ContextCompat.getColor(context, R.color.main));
+        b.tvTicArr.setTextColor(ContextCompat.getColor(context, R.color.main));
+        b.vTicArr.getLayoutParams().width = 0;
+        b.vTicArr.setLayoutParams(b.vTicArr.getLayoutParams());
+        b.vTicDep.getLayoutParams().width = 0;
+        b.vTicDep.setLayoutParams(b.vTicDep.getLayoutParams());
+        ((MainActivity) getActivity()).showBnv(true);
+    }
+
+    private void nodeExpand() {
+        b.tlTic.setVisibility(View.GONE);
+        b.llTicHide.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).showBnv(false);
     }
 
     private TextView makeNodeSelectText(String text) {
         TextView tv = new TextView(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
-        tv.setPadding(0,3,0,3);
+        tv.setPadding(0, 3, 0, 3);
         tv.setTextSize(15);
         tv.setTextColor(ContextCompat.getColor(context, R.color.main3));
         tv.setText(text);

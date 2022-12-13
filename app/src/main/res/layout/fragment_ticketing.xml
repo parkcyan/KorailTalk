@@ -2,132 +2,101 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_tic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whitesmoke"
+    android:orientation="vertical"
     tools:context=".ticketing.TicketingFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_tic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="2dp"
+        app:tabIndicatorColor="@color/main"
+        app:tabRippleColor="@color/gray2"
+        app:tabSelectedTextColor="@color/main"
+        app:tabTextAppearance="@style/tabText"
+        app:tabTextColor="@color/gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
+        android:layout_height="75dp"
+        android:layout_marginVertical="10dp"
         android:orientation="vertical">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_tic"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="2dp"
-            app:tabIndicatorColor="@color/main"
-            app:tabRippleColor="@color/gray2"
-            app:tabSelectedTextColor="@color/main"
-            app:tabTextAppearance="@style/tabText"
-            app:tabTextColor="@color/gray" />
+            android:layout_height="0dp"
+            android:layout_weight="2">
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="출발"
+                    android:textColor="@color/gray3"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="도착"
+                    android:textColor="@color/gray3"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_baseline_sync_24" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:layout_marginVertical="10dp"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="3">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="출발"
-                        android:textColor="@color/gray3"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="도착"
-                        android:textColor="@color/gray3"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/ic_baseline_sync_24" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_weight="1">
 
                     <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true">
-
-                            <TextView
-                                android:id="@+id/tv_tic_dep"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:gravity="center"
-                                android:text="출발"
-                                android:textColor="@color/main"
-                                android:textSize="35sp" />
-
-                            <View
-                                android:id="@+id/v_tic_dep"
-                                android:layout_width="0dp"
-                                android:layout_height="2dp"
-                                android:layout_alignParentBottom="true"
-                                android:layout_centerHorizontal="true"
-                                android:background="@color/main" />
-
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
 
                         <TextView
-                            android:id="@+id/tv_tic_arr"
+                            android:id="@+id/tv_tic_dep"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:text="도착"
+                            android:text="서울"
                             android:textColor="@color/main"
                             android:textSize="35sp" />
 
                         <View
-                            android:id="@+id/v_tic_arr"
+                            android:id="@+id/v_tic_dep"
                             android:layout_width="0dp"
                             android:layout_height="2dp"
                             android:layout_alignParentBottom="true"
@@ -136,147 +105,222 @@
 
                     </RelativeLayout>
 
-                </LinearLayout>
+                </RelativeLayout>
 
-                <ImageView
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_tic_arr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="대전"
+                        android:textColor="@color/main"
+                        android:textSize="35sp" />
+
+                    <View
+                        android:id="@+id/v_tic_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/main" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_baseline_arrow_forward_24" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tic_hide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/round_button"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="KTX역 선택 지도"
+            android:textColor="@color/gray4"
+            android:textSize="21sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="15dp"
+            android:background="@color/gray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tic_node"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/round_background_main4"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_tic_nodefold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_search_24" />
+
+            <EditText
+                android:id="@+id/et_tic_node"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="10"
+                android:background="@android:color/transparent"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:hint="역 명의 초성 또는 전체를 입력해 주세요."
+                android:maxLength="10"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/iv_tic_nodeclear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_clear_24"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_fic_nodeselect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:animateLayoutChanges="false"
+            android:background="@color/whitesmoke">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="13"
+                    android:background="@color/lightgray"
+                    android:fillViewport="true">
+
+                    <LinearLayout
+                        android:id="@+id/ll_tic_nodeselect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/tvstyle_nodeselect"
+                            android:text="가까운역" />
+
+                        <TextView
+                            style="@style/tvstyle_nodeselect"
+                            android:text="최근검색구간" />
+
+                        <TextView
+                            style="@style/tvstyle_nodeselect"
+                            android:text="주요역" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_tic_main"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/whitesmoke"
+                            android:nestedScrollingEnabled="false" />
+
+                    </LinearLayout>
+
+                </androidx.core.widget.NestedScrollView>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_tic_dark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80000000"
+                android:visibility="invisible">
+
+                <TextView
+                    android:id="@+id/tv_tic_sfl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_baseline_arrow_forward_24" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_tic_hide"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/round_button"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="KTX역 선택 지도"
-                android:textColor="@color/gray4"
-                android:textSize="21sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_tic"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:animateLayoutChanges="true"
-            android:background="@drawable/round_background_main4"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <LinearLayout
-                android:id="@+id/ll_tic_nodefold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_search_24" />
-
-                <EditText
-                    android:id="@+id/et_tic_node"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="10"
-                    android:background="@android:color/transparent"
-                    android:hint="역 명의 초성 또는 전체를 입력해 주세요."
-                    android:maxLength="10"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:id="@+id/iv_tic_nodeclear"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_clear_24"
-                    android:visibility="invisible" />
-
-            </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
-                android:background="@color/white">
+                    android:text="가"
+                    android:textColor="@color/white"
+                    android:textSize="120sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <androidx.core.widget.NestedScrollView
+                    <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="13"
-                        android:background="@color/lightgray"
-                        android:fillViewport="true">
+                        android:layout_weight="11.8" />
 
-                        <LinearLayout
-                            android:id="@+id/ll_tic_nodeselect"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/tvstyle_nodeselect"
-                                android:text="가까운역" />
-
-                            <TextView
-                                style="@style/tvstyle_nodeselect"
-                                android:text="최근검색구간" />
-
-                            <TextView
-                                style="@style/tvstyle_nodeselect"
-                                android:text="주요역" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_tic_main"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:nestedScrollingEnabled="false"
-                                android:background="@color/whitesmoke" />
-
-                        </LinearLayout>
-
-                    </androidx.core.widget.NestedScrollView>
+                    <LinearLayout
+                        android:id="@+id/ll_tic_sflc"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:orientation="vertical" />
 
                     <View
                         android:layout_width="0dp"
@@ -285,71 +329,37 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/rl_tic_dark"
-                    android:layout_width="match_parent"
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="#80000000"
-                    android:visibility="invisible">
-
-                    <TextView
-                        android:id="@+id/tv_tic_sfl"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="가"
-                        android:textColor="@color/white"
-                        android:textSize="120sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="11.8" />
-
-                        <LinearLayout
-                            android:id="@+id/ll_tic_sflc"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.2"
-                            android:orientation="vertical" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
+                    android:layout_weight="12" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_tic_sfl"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:background="@drawable/round_button"
+                    android:orientation="vertical" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="13" />
+            </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/ll_tic_sfl"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/round_button"
-                        android:orientation="vertical" />
+        </FrameLayout>
 
-                </LinearLayout>
-
-            </FrameLayout>
-
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tic_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="false"
+            android:visibility="gone"
+            android:layout_marginHorizontal="5dp"/>
 
     </LinearLayout>
 

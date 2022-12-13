@@ -23,6 +23,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         setToolbar();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void setToolbar() {
         toolbar = findViewById(R.id.toolbar);
         tv_toolbar = findViewById(R.id.tv_toolbar);
