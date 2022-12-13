@@ -259,19 +259,9 @@
                                 style="@style/tvstyle_nodeselect"
                                 android:text="가까운역" />
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@color/whitesmoke" />
-
                             <TextView
                                 style="@style/tvstyle_nodeselect"
                                 android:text="최근검색구간" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@color/whitesmoke" />
 
                             <TextView
                                 style="@style/tvstyle_nodeselect"

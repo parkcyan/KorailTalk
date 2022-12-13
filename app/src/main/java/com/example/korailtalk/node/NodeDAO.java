@@ -22,6 +22,9 @@ public interface NodeDAO {
     @Query("select * from node where mainnode = 1")
     List<Node> getMainNodes();
 
+    @Query("select * from node where nodename like '%' || :str || '%' order by nodename")
+    List<Node> searchNodes(String str);
+
     @Query("select count(*) from node where nodename >= :start and nodename < :end")
     int getNodeCountBetween(String start, String end);
 

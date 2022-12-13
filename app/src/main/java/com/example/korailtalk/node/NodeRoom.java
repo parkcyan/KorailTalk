@@ -39,7 +39,7 @@ public class NodeRoom {
             if (!hasTable() || !hasNode()) getNodeFromApi();
             else {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(1000);
                     handler.sendMessage(handler.obtainMessage(1, 1));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -78,6 +78,13 @@ public class NodeRoom {
             handler.sendMessage(handler.obtainMessage(2, nodeDAO.getAllNodes()));
         }).start();
         getNodeCountBetween();
+    }
+
+    public void searchNodes(String str) {
+        new Thread(() -> {
+            if (str.equals("")) handler.obtainMessage(4, null);
+            else handler.sendMessage(handler.obtainMessage(4, nodeDAO.searchNodes(str)));
+        }).start();
     }
 
     public void getNodeCountBetween() {

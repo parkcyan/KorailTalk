@@ -14,6 +14,7 @@ import com.example.korailtalk.node.NodeRoom;
 public class SplashActivity extends AppCompatActivity {
 
     Handler handler;
+    NodeRoom nodeRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         };
-        NodeRoom nodeRoom = new NodeRoom(this, handler);
+        nodeRoom = new NodeRoom(this, handler);
         nodeRoom.checkNodeTable();
     }
 
