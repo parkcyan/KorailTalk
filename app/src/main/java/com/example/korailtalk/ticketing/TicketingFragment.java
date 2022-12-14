@@ -8,16 +8,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,6 +34,7 @@ import com.example.korailtalk.node.Node;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class TicketingFragment extends Fragment {
@@ -54,6 +52,7 @@ public class TicketingFragment extends Fragment {
     private final TextView[] tvSfl = new TextView[15];
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
+    private Date date = new Date();
 
 
     @Override
@@ -93,6 +92,10 @@ public class TicketingFragment extends Fragment {
         }
 
         b.llSfl.setOnTouchListener(onSflTouch());
+
+        //출발일
+        b.tvDate.setText(Util.dateFormat(date, "yyyy년 MM월 dd일 (E) HH:mm"));
+        b.llDate.setOnClickListener(optionClick());
 
         return b.getRoot();
     }
@@ -137,7 +140,7 @@ public class TicketingFragment extends Fragment {
                     }
                     int itemCount = sfl.length + (nodeList.size() - sfl.length - onlyLeft) / 2 + onlyLeft;
                     adapter = new NodeAdapter(getLayoutInflater(), nodeList, fragment, false, itemCount);
-                    Util.setRecyclerView(context, b.rvMain, adapter, true);
+                    Util.setRecyclerView(context, b.rvNode, adapter, true);
                 } else if (msg.what == 4) {
                     adapter = new NodeAdapter(getLayoutInflater(), (ArrayList<Node>) msg.obj, fragment, true, 0);
                     Util.setRecyclerView(context, b.rvSearch, adapter, true);
@@ -249,6 +252,7 @@ public class TicketingFragment extends Fragment {
                     setTextWhite(index);
                 } else if (index < 0) b.tvSfl.setText(tvSfl[0].getText());
                 else b.tvSfl.setText(tvSfl[14].getText());
+                Log.d(TAG, "onScroll: ");
                 return false;
             }
 
@@ -283,6 +287,7 @@ public class TicketingFragment extends Fragment {
     private void nodeFold() {
         b.tlRoundTrip.setVisibility(View.VISIBLE);
         b.llHide.setVisibility(View.VISIBLE);
+        b.llSelect.setVisibility(View.VISIBLE);
         b.llNode.setVisibility(View.GONE);
         b.tvDep.setTextColor(ContextCompat.getColor(context, R.color.main));
         b.tvArr.setTextColor(ContextCompat.getColor(context, R.color.main));
@@ -296,8 +301,27 @@ public class TicketingFragment extends Fragment {
     private void nodeExpand() {
         b.tlRoundTrip.setVisibility(View.GONE);
         b.llHide.setVisibility(View.GONE);
+        b.llSelect.setVisibility(View.GONE);
         b.llNode.setVisibility(View.VISIBLE);
         ((MainActivity) getActivity()).showBnv(false);
+        b.rvNode.getLayoutParams().height = b.llSfl.getHeight();
+        b.rvNode.setLayoutParams(b.rvNode.getLayoutParams());
+
+    }
+
+    private View.OnClickListener optionClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getVisibility() == View.GONE) {
+                    b.llQty.setVisibility(View.GONE);
+                    b.llOption.setVisibility(View.GONE);
+                    b.llDate.setVisibility(View.GONE);
+                    view.setVisibility(View.VISIBLE);
+                }
+
+            }
+        };
     }
 
     private TextView makeSflText() {
