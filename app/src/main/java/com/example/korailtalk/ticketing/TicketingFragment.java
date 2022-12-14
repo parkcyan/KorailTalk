@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,7 +48,6 @@ public class TicketingFragment extends Fragment {
     private boolean isDepArr = true;
     private NodeRoom nodeRoom;
     private NodeAdapter adapter;
-    private final HashMap<TextView, View> underlineMap = new HashMap<>();
     // sfl = search first letter
     private final ImageView[] ivSfl = new ImageView[15];
     private final TextView[] tvSfl = new TextView[15];
@@ -54,16 +55,12 @@ public class TicketingFragment extends Fragment {
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
     private Date date = new Date();
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         b = FragmentTicketingBinding.inflate(inflater, container, false);
         context = getContext();
         fragment = this;
-
-        underlineMap.put(b.tvDep, b.vDep);
-        underlineMap.put(b.tvArr, b.vArr);
 
         nodeRoom = new NodeRoom(context, getNodeHandler());
         nodeRoom.getMainNodes();
@@ -74,8 +71,15 @@ public class TicketingFragment extends Fragment {
 
         b.llNodefold.setOnClickListener(view -> nodeFold());
 
-        b.tvDep.setOnClickListener(onCityClick());
-        b.tvArr.setOnClickListener(onCityClick());
+        nodeExpand();
+        b.rvNode.post(() -> {
+            b.rvNode.getLayoutParams().height = b.llSfl.getHeight();
+            b.rvNode.setLayoutParams(b.rvNode.getLayoutParams());
+            nodeFold();
+        });
+
+        b.rlDep.setOnClickListener(onCityClick());
+        b.rlArr.setOnClickListener(onCityClick());
 
         b.etNode.addTextChangedListener(edtTextChange());
 
@@ -170,17 +174,22 @@ public class TicketingFragment extends Fragment {
 
     private View.OnClickListener onCityClick() {
         return view -> {
-            TextView tvClick = (TextView) view;
-            TextView tvNotClick = view.getId() == R.id.tv_arr ? b.tvDep : b.tvArr;
-            View ulClick = underlineMap.get(tvClick);
-            View ulNotClick = underlineMap.get(tvNotClick);
+            TextView tvClick, tvNotClick;
+            View ulClick, ulNotClick;
+            if (view.getId() == R.id.rl_dep) {
+                tvClick = b.tvDep; tvNotClick = b.tvArr;
+                ulClick = b.vDep; ulNotClick = b.vArr;
+            } else {
+                tvClick = b.tvArr; tvNotClick = b.tvDep;
+                ulClick = b.vArr; ulNotClick = b.vDep;
+            }
             tvClick.setTextColor(ContextCompat.getColor(context, R.color.main));
             tvNotClick.setTextColor(ContextCompat.getColor(context, R.color.gray2));
             ulClick.getLayoutParams().width = tvClick.getWidth();
             ulClick.setLayoutParams(ulClick.getLayoutParams());
             ulNotClick.getLayoutParams().width = 0;
             ulNotClick.setLayoutParams(ulNotClick.getLayoutParams());
-            isDepArr = view.getId() == R.id.tv_dep;
+            isDepArr = view.getId() == R.id.rl_dep;
             nodeExpand();
         };
     }
@@ -188,6 +197,7 @@ public class TicketingFragment extends Fragment {
     public void citySelect(String node) {
         if (isDepArr) b.tvDep.setText(node);
         else b.tvArr.setText(node);
+        b.etNode.setText("");
         nodeFold();
     }
 
@@ -217,67 +227,27 @@ public class TicketingFragment extends Fragment {
         };
     }
 
-    private GestureDetector.OnGestureListener onSflScroll() {
-        return new GestureDetector.OnGestureListener() {
-            float sflHeight = 0;
-            int index = 0;
-
-            @Override
-            public boolean onDown(MotionEvent motionEvent) {
-                sflHeight = b.llSfl.getHeight();
-                index = (int) (motionEvent.getY() / (sflHeight / 15));
-                b.rlDark.setVisibility(View.VISIBLE);
-                b.tvSfl.setText(tvSfl[index].getText());
-                setCircleVis(index);
-                setTextWhite(index);
-                b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button_lightgray));
-                return false;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent motionEvent) {
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                index = (int) (motionEvent1.getY() / (sflHeight / 15));
-                if (index >= 0 && index <= 14) {
-                    b.tvSfl.setText(tvSfl[index].getText());
-                    setCircleVis(index);
-                    setTextWhite(index);
-                } else if (index < 0) b.tvSfl.setText(tvSfl[0].getText());
-                else b.tvSfl.setText(tvSfl[14].getText());
-                Log.d(TAG, "onScroll: ");
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent motionEvent) {
-            }
-
-            @Override
-            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                return false;
-            }
-        };
+    public void keyboardDown() {
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(b.rvNode.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private View.OnTouchListener onSflTouch() {
         return new View.OnTouchListener() {
-            final GestureDetector gesture = new GestureDetector(context, onSflScroll());
-
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                gesture.onTouchEvent(motionEvent);
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
                     b.rlDark.setVisibility(View.GONE);
                     setTextGray();
                     b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button));
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    float sflHeight = b.llSfl.getHeight();
+                    int index = (int) (motionEvent.getY() / (sflHeight / 15));
+                    b.rlDark.setVisibility(View.VISIBLE);
+                    b.tvSfl.setText(tvSfl[index].getText());
+                    setCircleVis(index);
+                    setTextWhite(index);
+                    b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button_lightgray));
                 }
                 return true;
             }
@@ -304,9 +274,6 @@ public class TicketingFragment extends Fragment {
         b.llSelect.setVisibility(View.GONE);
         b.llNode.setVisibility(View.VISIBLE);
         ((MainActivity) getActivity()).showBnv(false);
-        b.rvNode.getLayoutParams().height = b.llSfl.getHeight();
-        b.rvNode.setLayoutParams(b.rvNode.getLayoutParams());
-
     }
 
     private View.OnClickListener optionClick() {
@@ -365,5 +332,55 @@ public class TicketingFragment extends Fragment {
             textView.setTextColor(ContextCompat.getColor(context, R.color.gray3));
         }
     }
+
+//    private GestureDetector.OnGestureListener onSflScroll() {
+//        return new GestureDetector.OnGestureListener() {
+//            float sflHeight = 0;
+//            int index = 0;
+//
+//            @Override
+//            public boolean onDown(MotionEvent motionEvent) {
+//                sflHeight = b.llSfl.getHeight();
+//                index = (int) (motionEvent.getY() / (sflHeight / 15));
+//                b.rlDark.setVisibility(View.VISIBLE);
+//                b.tvSfl.setText(tvSfl[index].getText());
+//                setCircleVis(index);
+//                setTextWhite(index);
+//                b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button_lightgray));
+//                return false;
+//            }
+//
+//            @Override
+//            public void onShowPress(MotionEvent motionEvent) {
+//            }
+//
+//            @Override
+//            public boolean onSingleTapUp(MotionEvent motionEvent) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+////                index = (int) (motionEvent1.getY() / (sflHeight / 15));
+////                if (index >= 0 && index <= 14) {
+////                    b.tvSfl.setText(tvSfl[index].getText());
+////                    setCircleVis(index);
+////                    setTextWhite(index);
+////                } else if (index < 0) b.tvSfl.setText(tvSfl[0].getText());
+////                else b.tvSfl.setText(tvSfl[14].getText());
+////                Log.d(TAG, "onScroll: ");
+//                return false;
+//            }
+//
+//            @Override
+//            public void onLongPress(MotionEvent motionEvent) {
+//            }
+//
+//            @Override
+//            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+//                return false;
+//            }
+//        };
+//    }
 
 }

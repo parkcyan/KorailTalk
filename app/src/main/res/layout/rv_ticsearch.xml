@@ -23,15 +23,11 @@
             android:textColor="@color/black"
             android:textSize="19sp" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/lightgray"/>
-
         <TextView
             android:id="@+id/tv_node2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
             android:layout_marginBottom="1dp"
             android:layout_weight="1"
             android:background="@color/whitesmoke"
@@ -45,10 +41,9 @@
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="1dp"
         android:layout_weight="1"
-        android:background="@color/whitesmoke"
-        android:layout_marginStart="1dp"/>
-
+        android:background="@color/whitesmoke" />
 
 
 </LinearLayout>

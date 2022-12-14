@@ -16,6 +16,7 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -88,6 +89,7 @@
                         android:orientation="horizontal">
 
                         <RelativeLayout
+                            android:id="@+id/rl_dep"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -120,6 +122,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/rl_arr"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -240,7 +243,6 @@
                         android:textColor="@color/main3"
                         android:textSize="18sp" />
 
-
                 </LinearLayout>
 
                 <View
@@ -256,7 +258,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-
                 </LinearLayout>
 
                 <View
@@ -268,9 +269,11 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1.5" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
+
+            <!--////////////////////////////////////////////////-->
 
             <LinearLayout
                 android:id="@+id/ll_node"
@@ -349,7 +352,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_node"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_height="1dp"
                             android:layout_weight="12"
                             android:background="@color/whitesmoke" />
 
@@ -441,7 +444,7 @@
         android:id="@+id/ll_select"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.8"
         android:background="@color/main5"
         android:orientation="horizontal" />
 

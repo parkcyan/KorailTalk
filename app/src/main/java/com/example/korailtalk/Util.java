@@ -24,7 +24,7 @@ public class Util {
         else lm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rv.setAdapter(adapter);
         rv.setLayoutManager(lm);
-        //rv.setItemAnimator(null);
+        rv.setItemAnimator(null);
     }
 
     public static void changeInvisible(View[] viewArr, int visibility) {

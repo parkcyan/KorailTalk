@@ -50,16 +50,16 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     @Override
     public void onBindViewHolder(@NonNull NodeViewHolder holder, int position) {
         if (!search && index != nodeList.size()) {
-            if (nodeList.get(index) == null) {
-                holder.tvFl.setVisibility(View.VISIBLE);
-                holder.llNodeSelect.setVisibility(View.GONE);
-                holder.tvFl.setText(sfl[sflIndex++]);
-                index++;
-            } else {
+            if (nodeList.get(index) != null) {
                 holder.tvNode1.setText(nodeList.get(index++).nodename);
                 if (nodeList.get(index) != null) {
                     holder.tvNode2.setText(nodeList.get(index++).nodename);
                 }
+            } else {
+                holder.tvFl.setVisibility(View.VISIBLE);
+                holder.llNodeSelect.setVisibility(View.GONE);
+                holder.tvFl.setText(sfl[sflIndex++]);
+                index++;
             }
         } else if (search) {
             index = holder.getAdapterPosition() * 2;
@@ -92,6 +92,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
         return v -> {
             TextView tv = (TextView) v;
             if (!tv.getText().toString().equals("")) fragment.citySelect(tv.getText().toString());
+            fragment.keyboardDown();
         };
     }
 
@@ -108,6 +109,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
             llNodeSelect = v.findViewById(R.id.ll_nodeselect);
             tvNode1.setOnClickListener(onNodeClick());
             tvNode2.setOnClickListener(onNodeClick());
+            v.setOnClickListener(view -> fragment.keyboardDown());
         }
 
     }
