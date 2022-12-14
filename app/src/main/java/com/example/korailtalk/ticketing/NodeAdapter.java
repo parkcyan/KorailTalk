@@ -1,17 +1,16 @@
 package com.example.korailtalk.ticketing;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.korailtalk.R;
@@ -22,19 +21,23 @@ import java.util.ArrayList;
 
 public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder> {
 
-    LayoutInflater inflater;
-    ArrayList<Node> nodeArr;
-    Context context;
-    TicketingFragment fragment;
+    private final LayoutInflater inflater;
+    private final ArrayList<Node> nodeList;
+    private final TicketingFragment fragment;
     boolean search;
+    private final String[] sfl = {"가까운역", "최근검색구간", "주요역", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
+            "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
+    int index = 0;
+    int sflIndex = 0;
+    int itemCount;
 
-    public NodeAdapter(LayoutInflater inflater, ArrayList<Node> nodeArr,
-                       TicketingFragment fragment, Boolean search) {
+    public NodeAdapter(LayoutInflater inflater, ArrayList<Node> nodeList,
+                       TicketingFragment fragment, Boolean search, int itemCount) {
         this.inflater = inflater;
-        this.nodeArr = nodeArr;
+        this.nodeList = nodeList;
         this.fragment = fragment;
-        context = fragment.getContext();
         this.search = search;
+        this.itemCount = itemCount;
     }
 
     @NonNull
@@ -46,19 +49,33 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull NodeViewHolder holder, int position) {
-        int index = holder.getAdapterPosition() * 2;
-        holder.tv_tic_nodeleft.setText(nodeArr.get(index).nodename);
-        holder.tv_tic_nodeleft.setOnClickListener(onNodeClick());
-        if (nodeArr.size() > index + 1) {
-            holder.tv_tic_noderight.setText(nodeArr.get(index + 1).nodename);
-            holder.tv_tic_noderight.setOnClickListener(onNodeClick());
+        if (!search && index != nodeList.size()) {
+            if (nodeList.get(index) == null) {
+                holder.tvFl.setVisibility(View.VISIBLE);
+                holder.llNodeSelect.setVisibility(View.GONE);
+                holder.tvFl.setText(sfl[sflIndex++]);
+                index++;
+            } else {
+                holder.tvNode1.setText(nodeList.get(index++).nodename);
+                if (nodeList.get(index) != null) {
+                    holder.tvNode2.setText(nodeList.get(index++).nodename);
+                }
+            }
+        } else if (search) {
+            index = holder.getAdapterPosition() * 2;
+            holder.tvNode1.setText(nodeList.get(index).nodename);
+            if (nodeList.size() > index + 1) {
+                holder.tvNode2.setText(nodeList.get(index + 1).nodename);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (nodeArr.size() % 2 == 1) return nodeArr.size() / 2 + 1;
-        else return nodeArr.size() / 2;
+        if (search) {
+            if (nodeList.size() % 2 == 1) return nodeList.size() / 2 + 1;
+            else return nodeList.size() / 2;
+        } else return itemCount;
     }
 
     @Override
@@ -74,18 +91,23 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.NodeViewHolder
     private View.OnClickListener onNodeClick() {
         return v -> {
             TextView tv = (TextView) v;
-            fragment.citySelect(tv.getText().toString());
+            if (!tv.getText().toString().equals("")) fragment.citySelect(tv.getText().toString());
         };
     }
 
     public class NodeViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_tic_nodeleft, tv_tic_noderight;
+        LinearLayout llNodeSelect;
+        TextView tvFl, tvNode1, tvNode2;
 
         public NodeViewHolder(@NonNull View v) {
             super(v);
-            tv_tic_nodeleft = v.findViewById(R.id.tv_tic_nodeleft);
-            tv_tic_noderight = v.findViewById(R.id.tv_tic_noderight);
+            tvFl = v.findViewById(R.id.tv_fl);
+            tvNode1 = v.findViewById(R.id.tv_node1);
+            tvNode2 = v.findViewById(R.id.tv_node2);
+            llNodeSelect = v.findViewById(R.id.ll_nodeselect);
+            tvNode1.setOnClickListener(onNodeClick());
+            tvNode2.setOnClickListener(onNodeClick());
         }
 
     }

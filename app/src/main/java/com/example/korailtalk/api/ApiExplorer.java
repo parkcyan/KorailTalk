@@ -19,7 +19,9 @@ public class ApiExplorer {
     private static final String ENCODE = "UTF-8";
     private static final String DATA_TYPE = "json";
 
-    public JSONArray getNode(int city) throws IOException, JSONException {
+    private ApiExplorer() {}
+
+    public static JSONArray getNode(int city) throws IOException, JSONException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/TrainInfoService/getCtyAcctoTrainSttnList");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", ENCODE) + "=" + SERVICE_KEY)
                 .append("&" + URLEncoder.encode("numOfRows",ENCODE) + "=" + URLEncoder.encode("100", ENCODE))

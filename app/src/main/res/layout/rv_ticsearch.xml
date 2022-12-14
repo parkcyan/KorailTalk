@@ -11,7 +11,7 @@
         android:layout_weight="12">
 
         <TextView
-            android:id="@+id/tv_tic_nodeleft"
+            android:id="@+id/tv_node1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
@@ -29,7 +29,7 @@
             android:background="@color/lightgray"/>
 
         <TextView
-            android:id="@+id/tv_tic_noderight"
+            android:id="@+id/tv_node2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="1dp"
@@ -47,7 +47,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/whitesmoke"
-        android:layout_marginLeft="1dp"/>
+        android:layout_marginStart="1dp"/>
 
 
 
