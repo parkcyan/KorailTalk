@@ -22,6 +22,7 @@ public class NodeRoom {
             "청량리", "여수EXPO", "동해", "정동진", "안동", "서원주", "원주", "마산"};
     private final String[] ns = {"가", "나", "다", "마", "바", "사", "아", "자", "차", "타", "파", "하", "힣"};
     private final Handler handler;
+    private final ApiExplorer apiExplorer = ApiExplorer.getInstance();
 
     public NodeRoom(Context context, Handler handler) {
         nodeDB = NodeDB.getInstance(context);
@@ -49,7 +50,7 @@ public class NodeRoom {
             try {
                 if (hasTable()) nodeDAO.truncate();
                 for (int city : citycode) {
-                    JSONArray nodeArray = ApiExplorer.getNode(city);
+                    JSONArray nodeArray = apiExplorer.getNode(city);
                     for (int i = 0; i < nodeArray.length(); i++) {
                         Node node = new Gson().fromJson(nodeArray.getJSONObject(i).toString(), Node.class);
                         node.mainnode = Arrays.asList(mainnode).contains(node.nodename);

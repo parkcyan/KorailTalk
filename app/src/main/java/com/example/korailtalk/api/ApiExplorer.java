@@ -15,13 +15,21 @@ import java.net.URLEncoder;
 
 public class ApiExplorer {
 
-    private static final String SERVICE_KEY = "bV8Qa13gBAIQTlWOVkdceGorgqXDUFoPycZ71CS/Ez5b7w/kN1w89tV2zMBWwU4FZfaCqjC15LXqszMNwumAzw==";
-    private static final String ENCODE = "UTF-8";
-    private static final String DATA_TYPE = "json";
+    private static ApiExplorer instance;
+    private final String SERVICE_KEY = "bV8Qa13gBAIQTlWOVkdceGorgqXDUFoPycZ71CS/Ez5b7w/kN1w89tV2zMBWwU4FZfaCqjC15LXqszMNwumAzw==";
+    private final String ENCODE = "UTF-8";
+    private final String DATA_TYPE = "json";
 
     private ApiExplorer() {}
 
-    public static JSONArray getNode(int city) throws IOException, JSONException {
+    public static ApiExplorer getInstance() {
+        if (instance == null) {
+            instance = new ApiExplorer();
+        }
+        return instance;
+    }
+
+    public JSONArray getNode(int city) throws IOException, JSONException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/TrainInfoService/getCtyAcctoTrainSttnList");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", ENCODE) + "=" + SERVICE_KEY)
                 .append("&" + URLEncoder.encode("numOfRows",ENCODE) + "=" + URLEncoder.encode("100", ENCODE))
@@ -34,7 +42,7 @@ public class ApiExplorer {
         return json.getJSONArray("item");
     }
 
-    private static JSONObject connect(StringBuilder urlBuilder) throws IOException, JSONException {
+    private JSONObject connect(StringBuilder urlBuilder) throws IOException, JSONException {
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
