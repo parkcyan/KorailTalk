@@ -162,7 +162,7 @@
             <LinearLayout
                 android:id="@+id/ll_hide"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -173,7 +173,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/round_button"
                     android:gravity="center"
-                    android:padding="4dp"
+                    android:padding="3dp"
                     android:text="KTX역 선택 지도"
                     android:textColor="@color/gray4"
                     android:textSize="21sp" />
@@ -187,8 +187,7 @@
                 <LinearLayout
                     android:id="@+id/ll_date"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="105dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -205,10 +204,9 @@
                         android:id="@+id/tv_date"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="2.5"
                         android:gravity="center"
                         android:text="Date"
-                        android:textColor="@color/black"
                         android:textSize="28sp" />
 
                     <ImageView
@@ -221,6 +219,42 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/ll_date_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:background="@color/whitesmoke2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="25dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@drawable/round_button"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="달력에서 날짜 선택"
+                        android:textColor="@color/gray4"
+                        android:textSize="21sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
+                        android:background="@color/lightgray"
+                        android:layout_marginVertical="10dp"/>
+
+
+                </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -230,8 +264,7 @@
                 <LinearLayout
                     android:id="@+id/ll_qty"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="105dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -254,8 +287,7 @@
                 <LinearLayout
                     android:id="@+id/ll_option"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="105dp"
                     android:orientation="vertical">
 
                 </LinearLayout>
@@ -265,11 +297,6 @@
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
                     android:background="@color/gray" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
 
             </LinearLayout>
 

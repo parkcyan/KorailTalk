@@ -6,16 +6,17 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Locale;
 
 public class Util {
 
     private Util() {}
 
-    public static String dateFormat(Date date, String pattern) {
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        return sdf.format(date);
+    public static String dateFormat(Timestamp time, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.KOREA);
+        return sdf.format(time);
     }
 
     public static void setRecyclerView(Context context, RecyclerView rv, RecyclerView.Adapter<?> adapter, boolean orientation) {
@@ -24,6 +25,7 @@ public class Util {
         else lm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rv.setAdapter(adapter);
         rv.setLayoutManager(lm);
+        rv.setHasFixedSize(true);
         rv.setItemAnimator(null);
     }
 

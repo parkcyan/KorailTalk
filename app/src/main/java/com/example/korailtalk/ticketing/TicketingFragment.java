@@ -33,11 +33,14 @@ import com.example.korailtalk.node.NodeRoom;
 import com.example.korailtalk.MainActivity;
 import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.FragmentTicketingBinding;
-import com.example.korailtalk.node.Node;
 import com.google.android.material.tabs.TabLayout;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.sql.Date;
 
 public class TicketingFragment extends Fragment {
 
@@ -54,7 +57,6 @@ public class TicketingFragment extends Fragment {
     private final int[] sflPosition = new int[15];
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
-    private Date date = new Date();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -65,14 +67,15 @@ public class TicketingFragment extends Fragment {
 
         nodeRoom = new NodeRoom(context, getNodeHandler());
 
+        /* 탭 */
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("편도"));
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("왕복"));
         b.tlRoundTrip.addOnTabSelectedListener(onTabSelect());
 
+        /* 역 선택창 */
         b.llNodefold.setOnClickListener(view -> nodeFold());
 
-        adapter = new NodeAdapter(getLayoutInflater(), fragment);
-        b.rvNode.setHasFixedSize(true);
+        adapter = new NodeAdapter(fragment);
         b.rvNode.setItemViewCacheSize(30);
         Util.setRecyclerView(context, b.rvNode, adapter, true);
 
@@ -90,13 +93,6 @@ public class TicketingFragment extends Fragment {
             }
         }
 
-        b.rlDep.setOnClickListener(onCityClick());
-        b.rlArr.setOnClickListener(onCityClick());
-
-        b.etNode.addTextChangedListener(edtTextChange());
-
-        b.ivNodeclear.setOnClickListener(view -> b.etNode.setText(""));
-
         for (int i = 0; i < ivSfl.length; i++) {
             ImageView iv = makeSflCircle();
             TextView tv = makeSflText();
@@ -108,10 +104,26 @@ public class TicketingFragment extends Fragment {
         }
 
         b.llSfl.setOnTouchListener(onSflTouch());
+        b.etNode.addTextChangedListener(edtTextChange());
+        b.ivNodeclear.setOnClickListener(view -> b.etNode.setText(""));
 
-        //출발일
-        b.tvDate.setText(Util.dateFormat(date, "yyyy년 MM월 dd일 (E) HH:mm"));
+        /* 역 확인창 */
+        b.rlDep.setOnClickListener(onCityClick());
+        b.rlArr.setOnClickListener(onCityClick());
+
+        /* 출발일 */
+        b.tvDate.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) HH:mm")));
         b.llDate.setOnClickListener(optionClick());
+
+        Timestamp[] timesArr = new Timestamp[30];
+        Calendar cal = Calendar.getInstance();
+        timesArr[0] = new Timestamp(System.currentTimeMillis());
+        for (int i = 1; i < timesArr.length; i++) {
+            cal.add(Calendar.DATE, 1);
+            timesArr[i] = new Timestamp(cal.getTime().getTime());
+        }
+        Util.setRecyclerView(context, b.rvDate, new DateAdapter(this, timesArr), false);
+        Util.setRecyclerView(context, b.rvTime, new TimeAdapter(this), false);
 
         return b.getRoot();
     }
@@ -129,7 +141,7 @@ public class TicketingFragment extends Fragment {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == NodeRoom.SEARCH_SUCCESS) {
-                    adapter = new NodeAdapter(getLayoutInflater(), fragment, (ArrayList<NodeForRv>) msg.obj);
+                    adapter = new NodeAdapter(fragment, (ArrayList<NodeForRv>) msg.obj);
                     Util.setRecyclerView(context, b.rvSearch, adapter, true);
                 }
             }
@@ -310,16 +322,12 @@ public class TicketingFragment extends Fragment {
     }
 
     private View.OnClickListener optionClick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.getVisibility() == View.GONE) {
-                    b.llQty.setVisibility(View.GONE);
-                    b.llOption.setVisibility(View.GONE);
-                    b.llDate.setVisibility(View.GONE);
-                    view.setVisibility(View.VISIBLE);
-                }
-
+        return view -> {
+            if (view.getVisibility() == View.GONE) {
+                b.llQty.setVisibility(View.GONE);
+                b.llOption.setVisibility(View.GONE);
+                b.llDate.setVisibility(View.GONE);
+                view.setVisibility(View.VISIBLE);
             }
         };
     }
@@ -365,6 +373,5 @@ public class TicketingFragment extends Fragment {
             textView.setTextColor(ContextCompat.getColor(context, R.color.gray3));
         }
     }
-
 
 }

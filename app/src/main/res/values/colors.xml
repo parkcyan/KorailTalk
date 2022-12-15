@@ -20,4 +20,6 @@
     <color name="gray4">#424242</color>
     <color name="whitesmoke">#F8F8F8</color>
     <color name="whitesmoke2">#F1F1F1</color>
+    <color name="red">#FF0000</color>
+    <color name="skyblue">#00B0FF</color>
 </resources>
