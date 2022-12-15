@@ -1,7 +1,5 @@
 package com.example.korailtalk.ticketing;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.os.Bundle;
 
@@ -16,7 +14,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,11 +33,9 @@ import com.example.korailtalk.databinding.FragmentTicketingBinding;
 import com.google.android.material.tabs.TabLayout;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.sql.Date;
+import java.util.Date;
 
 public class TicketingFragment extends Fragment {
 
@@ -57,6 +52,8 @@ public class TicketingFragment extends Fragment {
     private final int[] sflPosition = new int[15];
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
+    private final Calendar cal = Calendar.getInstance();
+    private Timestamp tsDate = new Timestamp(System.currentTimeMillis());
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -112,19 +109,18 @@ public class TicketingFragment extends Fragment {
         b.rlArr.setOnClickListener(onCityClick());
 
         /* 출발일 */
-        b.tvDate.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) HH:mm")));
-        b.llDate.setOnClickListener(optionClick());
+        setDate();
+        //b.llDate.setOnClickListener(optionClick());
 
-        Timestamp[] timesArr = new Timestamp[30];
-        Calendar cal = Calendar.getInstance();
-        timesArr[0] = new Timestamp(System.currentTimeMillis());
+        Timestamp[] timesArr = new Timestamp[31];
+
+        timesArr[0] = tsDate;
         for (int i = 1; i < timesArr.length; i++) {
             cal.add(Calendar.DATE, 1);
             timesArr[i] = new Timestamp(cal.getTime().getTime());
         }
         Util.setRecyclerView(context, b.rvDate, new DateAdapter(this, timesArr), false);
         Util.setRecyclerView(context, b.rvTime, new TimeAdapter(this), false);
-
         return b.getRoot();
     }
 
@@ -135,6 +131,10 @@ public class TicketingFragment extends Fragment {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void setDate() {
+        b.tvDate.setText(Util.dateFormat(tsDate, "yyyy년 M월 d일 (E) HH:mm"));
+    }
 
     private Handler getNodeHandler() {
         return new Handler(Looper.getMainLooper()) {
@@ -330,6 +330,20 @@ public class TicketingFragment extends Fragment {
                 view.setVisibility(View.VISIBLE);
             }
         };
+    }
+
+    public void onDateClick(Timestamp date, int prePosition, int position) {
+        StringBuilder dateStr = new StringBuilder(Util.dateFormat(date, "yyyy-MM-dd HH:mm:ss"));
+        dateStr.replace(11, dateStr.length(),"00:00:00");
+        tsDate = Timestamp.valueOf(dateStr.toString());
+        setDate();
+    }
+
+    public void onTimeClick(String time) {
+        StringBuilder dateStr = new StringBuilder(Util.dateFormat(tsDate, "yyyy-MM-dd HH:mm:ss"));
+        dateStr.replace(11, dateStr.length(),time + ":00:00");
+        tsDate = Timestamp.valueOf(dateStr.toString());
+        setDate();
     }
 
     private TextView makeSflText() {

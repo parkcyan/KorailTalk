@@ -32,6 +32,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
     @Override
     public void onBindViewHolder(@NonNull TimeViewHolder holder, int position) {
         holder.tvTime.setText(time[position]);
+        holder.itemView.setOnClickListener(v -> fragment.onTimeClick(time[position]));
     }
 
     @Override

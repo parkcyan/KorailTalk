@@ -10,33 +10,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="월"
-        android:textSize="19sp"
+        android:text="오늘"
         android:textColor="@color/main3"
-        app:layout_constraintBottom_toTopOf="@+id/tv_day"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toTopOf="@+id/v_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
 
     <TextView
         android:id="@+id/tv_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
         android:text="1"
         android:textSize="15sp"
-        android:layout_marginBottom="3dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_slash"
+        app:layout_constraintStart_toStartOf="@+id/iv_slash" />
+
+    <View
+        android:id="@+id/v_back"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/main2"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.6" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_slash"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:src="@drawable/ic_slash"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.20"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_day" />
 
@@ -47,9 +57,33 @@
         android:layout_centerInParent="true"
         android:text="18"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/v_back"
+        app:layout_constraintEnd_toEndOf="@+id/v_back"
+        app:layout_constraintStart_toStartOf="@+id/v_back"
+        app:layout_constraintTop_toTopOf="@+id/v_back"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <ImageView
+        android:id="@+id/iv_today"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:src="@drawable/ic_baseline_circle_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tv_day"
+        app:layout_constraintStart_toEndOf="@+id/tv_day" />
+
+    <TextView
+        android:id="@+id/tv_depday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="출발일"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_week" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_day" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

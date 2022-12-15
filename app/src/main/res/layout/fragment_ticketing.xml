@@ -222,7 +222,7 @@
                 <LinearLayout
                     android:id="@+id/ll_date_content"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="225dp"
                     android:orientation="vertical"
                     android:background="@color/whitesmoke2">
 
@@ -230,7 +230,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="25dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/round_button"
                         android:gravity="center"
                         android:padding="3dp"
@@ -248,7 +248,7 @@
                         android:id="@+id/rv_time"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.6"
+                        android:layout_weight="0.5"
                         android:background="@color/lightgray"
                         android:layout_marginVertical="10dp"/>
 
