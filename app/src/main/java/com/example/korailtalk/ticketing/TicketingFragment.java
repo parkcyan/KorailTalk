@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -37,7 +38,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class TicketingFragment extends Fragment {
 
@@ -51,6 +51,7 @@ public class TicketingFragment extends Fragment {
     // sfl = search first letter
     private final ImageView[] ivSfl = new ImageView[15];
     private final TextView[] tvSfl = new TextView[15];
+    private final int[] sflPosition = new int[15];
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
     private Date date = new Date();
@@ -63,7 +64,6 @@ public class TicketingFragment extends Fragment {
         fragment = this;
 
         nodeRoom = new NodeRoom(context, getNodeHandler());
-        nodeRoom.getMainNodes();
 
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("편도"));
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("왕복"));
@@ -71,12 +71,24 @@ public class TicketingFragment extends Fragment {
 
         b.llNodefold.setOnClickListener(view -> nodeFold());
 
+        adapter = new NodeAdapter(getLayoutInflater(), fragment);
+        b.rvNode.setHasFixedSize(true);
+        b.rvNode.setItemViewCacheSize(30);
+        Util.setRecyclerView(context, b.rvNode, adapter, true);
+
         nodeExpand();
         b.rvNode.post(() -> {
             b.rvNode.getLayoutParams().height = b.llSfl.getHeight();
             b.rvNode.setLayoutParams(b.rvNode.getLayoutParams());
             nodeFold();
         });
+
+        int position = 0;
+        for (int i = 0; i < NodeRoom.nodeListForRv.size(); i++) {
+            if (NodeRoom.nodeListForRv.get(i).getViewType() == 1) {
+                sflPosition[position++] = i;
+            }
+        }
 
         b.rlDep.setOnClickListener(onCityClick());
         b.rlArr.setOnClickListener(onCityClick());
@@ -114,39 +126,10 @@ public class TicketingFragment extends Fragment {
 
     private Handler getNodeHandler() {
         return new Handler(Looper.getMainLooper()) {
-            ArrayList<Node> nodeList = new ArrayList<>();
-            ArrayList<Node> nodeMain;
-            ArrayList<Node> nodeAll;
-            ArrayList<Integer> nodeIndexArr;
-
             @Override
             public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 1) {
-                    nodeMain = (ArrayList<Node>) msg.obj;
-                    nodeRoom.getAllNodes();
-                } else if (msg.what == 2) {
-                    nodeAll = (ArrayList<Node>) msg.obj;
-                    nodeRoom.getNodeCountBetween();
-                } else if (msg.what == 3) {
-                    nodeIndexArr = (ArrayList<Integer>) msg.obj;
-                    nodeList.add(null); // 가까운역
-                    nodeList.add(null); // 최근검색구간
-                    nodeList.add(null); // 주요역
-                    nodeList.addAll(nodeMain);
-                    nodeList.addAll(nodeAll);
-                    int index = 0;
-                    int onlyLeft = nodeMain.size() % 2;
-                    for (int i = 0; i < nodeIndexArr.size(); i++) {
-                        if (i != nodeIndexArr.size() - 1)
-                            nodeList.add(3 + nodeMain.size() + nodeIndexArr.get(i) + index++, null);
-                        if (i != 0 && (nodeIndexArr.get(i) - nodeIndexArr.get(i - 1)) % 2 != 0)
-                            onlyLeft++;
-                    }
-                    int itemCount = sfl.length + (nodeList.size() - sfl.length - onlyLeft) / 2 + onlyLeft;
-                    adapter = new NodeAdapter(getLayoutInflater(), nodeList, fragment, false, itemCount);
-                    Util.setRecyclerView(context, b.rvNode, adapter, true);
-                } else if (msg.what == 4) {
-                    adapter = new NodeAdapter(getLayoutInflater(), (ArrayList<Node>) msg.obj, fragment, true, 0);
+                if (msg.what == NodeRoom.SEARCH_SUCCESS) {
+                    adapter = new NodeAdapter(getLayoutInflater(), fragment, (ArrayList<NodeForRv>) msg.obj);
                     Util.setRecyclerView(context, b.rvSearch, adapter, true);
                 }
             }
@@ -177,11 +160,15 @@ public class TicketingFragment extends Fragment {
             TextView tvClick, tvNotClick;
             View ulClick, ulNotClick;
             if (view.getId() == R.id.rl_dep) {
-                tvClick = b.tvDep; tvNotClick = b.tvArr;
-                ulClick = b.vDep; ulNotClick = b.vArr;
+                tvClick = b.tvDep;
+                tvNotClick = b.tvArr;
+                ulClick = b.vDep;
+                ulNotClick = b.vArr;
             } else {
-                tvClick = b.tvArr; tvNotClick = b.tvDep;
-                ulClick = b.vArr; ulNotClick = b.vDep;
+                tvClick = b.tvArr;
+                tvNotClick = b.tvDep;
+                ulClick = b.vArr;
+                ulNotClick = b.vDep;
             }
             tvClick.setTextColor(ContextCompat.getColor(context, R.color.main));
             tvNotClick.setTextColor(ContextCompat.getColor(context, R.color.gray2));
@@ -234,22 +221,68 @@ public class TicketingFragment extends Fragment {
 
     private View.OnTouchListener onSflTouch() {
         return new View.OnTouchListener() {
+            final GestureDetector gesture = new GestureDetector(context, onSflScroll());
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                gesture.onTouchEvent(motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     b.rlDark.setVisibility(View.GONE);
                     setTextGray();
                     b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button));
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    float sflHeight = b.llSfl.getHeight();
-                    int index = (int) (motionEvent.getY() / (sflHeight / 15));
-                    b.rlDark.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        };
+    }
+
+    private GestureDetector.OnGestureListener onSflScroll() {
+        return new GestureDetector.OnGestureListener() {
+            float sflHeight = 0;
+            int index = 0;
+
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                sflHeight = b.llSfl.getHeight();
+                index = (int) (motionEvent.getY() / (sflHeight / 15));
+                b.rlDark.setVisibility(View.VISIBLE);
+                b.tvSfl.setText(tvSfl[index].getText());
+                setCircleVis(index);
+                setTextWhite(index);
+                ((LinearLayoutManager) b.rvNode.getLayoutManager()).scrollToPositionWithOffset(sflPosition[index], 0);
+                b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button_lightgray));
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                index = (int) (motionEvent1.getY() / (sflHeight / 15));
+                if (index >= 0 && index <= 14) {
                     b.tvSfl.setText(tvSfl[index].getText());
                     setCircleVis(index);
                     setTextWhite(index);
-                    b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button_lightgray));
-                }
-                return true;
+                    ((LinearLayoutManager) b.rvNode.getLayoutManager()).scrollToPositionWithOffset(sflPosition[index], 0);
+                } else if (index < 0) b.tvSfl.setText(tvSfl[0].getText());
+                else b.tvSfl.setText(tvSfl[14].getText());
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return false;
             }
         };
     }
@@ -333,54 +366,5 @@ public class TicketingFragment extends Fragment {
         }
     }
 
-//    private GestureDetector.OnGestureListener onSflScroll() {
-//        return new GestureDetector.OnGestureListener() {
-//            float sflHeight = 0;
-//            int index = 0;
-//
-//            @Override
-//            public boolean onDown(MotionEvent motionEvent) {
-//                sflHeight = b.llSfl.getHeight();
-//                index = (int) (motionEvent.getY() / (sflHeight / 15));
-//                b.rlDark.setVisibility(View.VISIBLE);
-//                b.tvSfl.setText(tvSfl[index].getText());
-//                setCircleVis(index);
-//                setTextWhite(index);
-//                b.llSfl.setBackground(ContextCompat.getDrawable(context, R.drawable.round_button_lightgray));
-//                return false;
-//            }
-//
-//            @Override
-//            public void onShowPress(MotionEvent motionEvent) {
-//            }
-//
-//            @Override
-//            public boolean onSingleTapUp(MotionEvent motionEvent) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-////                index = (int) (motionEvent1.getY() / (sflHeight / 15));
-////                if (index >= 0 && index <= 14) {
-////                    b.tvSfl.setText(tvSfl[index].getText());
-////                    setCircleVis(index);
-////                    setTextWhite(index);
-////                } else if (index < 0) b.tvSfl.setText(tvSfl[0].getText());
-////                else b.tvSfl.setText(tvSfl[14].getText());
-////                Log.d(TAG, "onScroll: ");
-//                return false;
-//            }
-//
-//            @Override
-//            public void onLongPress(MotionEvent motionEvent) {
-//            }
-//
-//            @Override
-//            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-//                return false;
-//            }
-//        };
-//    }
 
 }

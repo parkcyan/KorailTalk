@@ -23,7 +23,8 @@ public class SplashActivity extends AppCompatActivity {
         handler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 1) {
+                if (msg.what == NodeRoom.GET_NODE_SUCCESS) nodeRoom.getNodeForRv();
+                else if (msg.what == NodeRoom.GET_LIST_FOR_RV) {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }
