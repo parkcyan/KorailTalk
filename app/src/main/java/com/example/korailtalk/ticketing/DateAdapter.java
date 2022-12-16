@@ -22,12 +22,13 @@ import com.example.korailtalk.Util;
 import java.sql.Timestamp;
 
 
-public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder>{
+public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder> {
 
     private final LayoutInflater inflater;
     private final TicketingFragment fragment;
     private final Timestamp[] timesArr;
-    private int prePosition = 0;
+    private int selectedPosition = 0;
+    private boolean onChange = true;
 
     public DateAdapter(TicketingFragment fragment, Timestamp[] timesArr) {
         this.fragment = fragment;
@@ -48,30 +49,31 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         holder.tvDay.setText(day);
         if (position != 0) {
             holder.tvWeek.setText(week);
-        } else {
-            holder.ivToday.setVisibility(View.VISIBLE);
+        }
+
+        if (position == selectedPosition) {
             holder.vBack.setVisibility(View.VISIBLE);
             holder.tvDepday.setVisibility(View.VISIBLE);
             holder.tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.white));
+            if (day.equals("1")) holder.ivSlash.setVisibility(View.INVISIBLE);
+        } else {
+            holder.vBack.setVisibility(View.INVISIBLE);
+            holder.tvDepday.setVisibility(View.INVISIBLE);
+            holder.tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.black));
+            setColorWeek(holder.tvWeek, holder.tvDay, day);
+            if (day.equals("1")) holder.ivSlash.setVisibility(View.VISIBLE);
         }
-        if (week.equals("토")) {
-            holder.tvWeek.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
-            holder.tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
-        } else if (week.equals("일")) {
-            holder.tvWeek.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
-            holder.tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
-        }
+
+        setColorWeek(holder.tvWeek, holder.tvDay, week);
         if (day.equals("1")) {
             holder.ivSlash.setVisibility(View.VISIBLE);
             holder.tvMonth.setVisibility(View.VISIBLE);
             holder.tvMonth.setText(Util.dateFormat(timesArr[position], "M"));
-            if (week.equals("토")) holder.tvMonth.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
-            else if (week.equals("일")) holder.tvMonth.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
+            if (week.equals("토"))
+                holder.tvMonth.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
+            else if (week.equals("일"))
+                holder.tvMonth.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
         }
-//        holder.itemView.setOnClickListener(v -> {
-//            fragment.onDateClick(timesArr[position], prePosition, position);
-//            prePosition = holder.getAdapterPosition();
-//        });
     }
 
     @Override
@@ -89,12 +91,21 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         return position;
     }
 
-    public static class DateViewHolder extends RecyclerView.ViewHolder {
+    private void setColorWeek(TextView tvWeek, TextView tvDay, String week) {
+        if (week.equals("토")) {
+            tvWeek.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
+            tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
+        } else if (week.equals("일")) {
+            tvWeek.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
+            tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
+        }
+    }
+
+    public class DateViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvWeek, tvMonth, tvDay, tvDepday;
         ImageView ivSlash, ivToday;
         View vBack;
-        Handler handler;
 
         public DateViewHolder(@NonNull View v) {
             super(v);
@@ -105,25 +116,13 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             ivSlash = v.findViewById(R.id.iv_slash);
             ivToday = v.findViewById(R.id.iv_today);
             vBack = v.findViewById(R.id.v_back);
-//            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    handler.sendMessage(handler.obtainMessage(1, getAdapterPosition()));
-//                }
-//            });
+            v.setOnClickListener(view -> {
+                fragment.onDateClick(timesArr[getAdapterPosition()]);
+                selectedPosition = getAdapterPosition();
+                notifyDataSetChanged();
+            });
         }
 
-//        public Handler handler() {
-//            return new Handler(Looper.getMainLooper()) {
-//                @Override
-//                public void handleMessage(@NonNull Message msg) {
-//                    super.handleMessage(msg);
-//                    if (msg.what == 1) {
-//                        Log.d(TAG, "handleMessage: " + msg.obj);
-//                    }
-//                }
-//            };
-//        }
     }
 
 }

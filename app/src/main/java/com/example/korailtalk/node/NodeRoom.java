@@ -122,6 +122,7 @@ public class NodeRoom {
                 for (int i = 0; i < searchList.size(); i++) {
                     if (i + 1 != searchList.size()) {
                         searchListForRv.add(new NodeForRv(searchList.get(i).nodename, searchList.get(i + 1).nodename, 2));
+                        i++;
                     } else searchListForRv.add(new NodeForRv(searchList.get(i).nodename, "", 2));
                 }
                 handler.sendMessage(handler.obtainMessage(SEARCH_SUCCESS, searchListForRv));

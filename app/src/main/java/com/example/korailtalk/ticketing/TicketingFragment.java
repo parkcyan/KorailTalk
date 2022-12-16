@@ -332,7 +332,7 @@ public class TicketingFragment extends Fragment {
         };
     }
 
-    public void onDateClick(Timestamp date, int prePosition, int position) {
+    public void onDateClick(Timestamp date) {
         StringBuilder dateStr = new StringBuilder(Util.dateFormat(date, "yyyy-MM-dd HH:mm:ss"));
         dateStr.replace(11, dateStr.length(),"00:00:00");
         tsDate = Timestamp.valueOf(dateStr.toString());
