@@ -21,10 +21,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.korailtalk.MyDialog;
 import com.example.korailtalk.Util;
 import com.example.korailtalk.node.NodeRoom;
 import com.example.korailtalk.MainActivity;
@@ -35,7 +37,6 @@ import com.google.android.material.tabs.TabLayout;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class TicketingFragment extends Fragment {
 
@@ -50,10 +51,13 @@ public class TicketingFragment extends Fragment {
     private final ImageView[] ivSfl = new ImageView[15];
     private final TextView[] tvSfl = new TextView[15];
     private final int[] sflPosition = new int[15];
+    private int qty = 1;
+    private final ArrayList<QtySet> qtyList = new ArrayList<>();
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
     private final Calendar cal = Calendar.getInstance();
-    private Timestamp tsDate = new Timestamp(System.currentTimeMillis());
+    private Timestamp tsDate = Util.getCurrentTime();
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -110,7 +114,7 @@ public class TicketingFragment extends Fragment {
 
         /* 출발일 */
         setDate();
-        //b.llDate.setOnClickListener(optionClick());
+        b.llDate.setOnClickListener(optionClick());
 
         Timestamp[] timesArr = new Timestamp[31];
 
@@ -119,8 +123,25 @@ public class TicketingFragment extends Fragment {
             cal.add(Calendar.DATE, 1);
             timesArr[i] = new Timestamp(cal.getTime().getTime());
         }
+
+        int hour = Util.dateFormatInt(Util.getCurrentTime(), "H");
         Util.setRecyclerView(context, b.rvDate, new DateAdapter(this, timesArr), false);
-        Util.setRecyclerView(context, b.rvTime, new TimeAdapter(this), false);
+        Util.setRecyclerView(context, b.rvTime, new TimeAdapter(this, hour), false);
+        ((LinearLayoutManager) b.rvTime.getLayoutManager()).scrollToPositionWithOffset(hour, 0);
+
+        /* 수량 */
+        b.llQty.setOnClickListener(optionClick());
+        qtyList.add(new QtySet(1, b.tvQty1, b.ibQty1min, b.ibQty1pls));
+        qtyList.add(new QtySet(0, b.tvQty2, b.ibQty2min, b.ibQty2pls));
+        qtyList.add(new QtySet(0, b.tvQty3, b.ibQty3min, b.ibQty3pls));
+        qtyList.add(new QtySet(0, b.tvQty4, b.ibQty4min, b.ibQty4pls));
+        qtyList.add(new QtySet(0, b.tvQty5, b.ibQty5min, b.ibQty5pls));
+        qtyList.add(new QtySet(0, b.tvQty6, b.ibQty6min, b.ibQty6pls));
+        for (int i = 0; i < qtyList.size(); i++) {
+            qtyList.get(i).getQtyPls().setOnClickListener(operateQty(i, true));
+            qtyList.get(i).getQtyMin().setOnClickListener(operateQty(i, false));
+        }
+
         return b.getRoot();
     }
 
@@ -141,7 +162,7 @@ public class TicketingFragment extends Fragment {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == NodeRoom.SEARCH_SUCCESS) {
-                    adapter = new NodeAdapter(fragment, (ArrayList<NodeForRv>) msg.obj);
+                    adapter = new NodeAdapter(fragment, (ArrayList<NodeVO>) msg.obj);
                     Util.setRecyclerView(context, b.rvSearch, adapter, true);
                 }
             }
@@ -323,27 +344,84 @@ public class TicketingFragment extends Fragment {
 
     private View.OnClickListener optionClick() {
         return view -> {
-            if (view.getVisibility() == View.GONE) {
-                b.llQty.setVisibility(View.GONE);
-                b.llOption.setVisibility(View.GONE);
-                b.llDate.setVisibility(View.GONE);
-                view.setVisibility(View.VISIBLE);
+            if (view.getId() == R.id.ll_date) {
+                if (b.llDateContent.getVisibility() == View.GONE) {
+                    b.llDateContent.setVisibility(View.VISIBLE);
+                    b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
+                    b.ivDateexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
+                    b.llDateContent.post(() -> b.svTic.smoothScrollTo(0, b.llDateContent.getTop()));
+                } else {
+                    b.llDateContent.setVisibility(View.GONE);
+                    b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.whitesmoke));
+                    b.ivDateexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24_main);
+                }
+            } else if (view.getId() == R.id.ll_qty) {
+                if (b.llQtyContent.getVisibility() == View.GONE) {
+                    b.llQtyContent.setVisibility(View.VISIBLE);
+                    b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
+                    b.ivQtyexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
+                } else {
+                    b.llQtyContent.setVisibility(View.GONE);
+                    b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.whitesmoke));
+                    b.ivQtyexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24_main);
+                }
             }
         };
     }
 
-    public void onDateClick(Timestamp date) {
-        StringBuilder dateStr = new StringBuilder(Util.dateFormat(date, "yyyy-MM-dd HH:mm:ss"));
-        dateStr.replace(11, dateStr.length(),"00:00:00");
+    public void onDateClick(Timestamp date, int position) {
+        if (position == 0) {
+            int hour = Util.dateFormatInt(Util.getCurrentTime(), "H");
+            ((LinearLayoutManager) b.rvTime.getLayoutManager()).scrollToPositionWithOffset(hour, 0);
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    () -> b.rvTime.findViewHolderForAdapterPosition(hour).itemView.performClick(), 10);
+        } else {
+            b.rvTime.scrollToPosition(0);
+            b.rvTime.post(() -> b.rvTime.findViewHolderForAdapterPosition(0).itemView.performClick());
+        }
+        StringBuilder dateStr = new StringBuilder(Util.dateFormat(date));
+        dateStr.replace(11, dateStr.length(), "00:00:00");
         tsDate = Timestamp.valueOf(dateStr.toString());
         setDate();
     }
 
-    public void onTimeClick(String time) {
-        StringBuilder dateStr = new StringBuilder(Util.dateFormat(tsDate, "yyyy-MM-dd HH:mm:ss"));
-        dateStr.replace(11, dateStr.length(),time + ":00:00");
-        tsDate = Timestamp.valueOf(dateStr.toString());
+    public boolean onTimeClick(String time) {
+        StringBuilder nowDateStr = new StringBuilder(Util.dateFormat(Util.getCurrentTime()));
+        StringBuilder dateStr = new StringBuilder(Util.dateFormat(tsDate));
+        dateStr.replace(11, nowDateStr.length(), time + ":00:00");
+        nowDateStr.replace(14, dateStr.length(), "00:00");
+        Timestamp temp = Timestamp.valueOf(dateStr.toString());
+        if (temp.getTime() < Timestamp.valueOf(nowDateStr.toString()).getTime()) {
+            new MyDialog(context, getLayoutInflater(),
+                    "이용안내", "현재 시간 이전은 입력이 불가능합니다.").show();
+            return false;
+        } else if (temp.getTime() == Timestamp.valueOf(nowDateStr.toString()).getTime()) {
+            temp = Util.getCurrentTime();
+        }
+        tsDate = temp;
         setDate();
+        return true;
+    }
+
+    private View.OnClickListener operateQty(int index, boolean plus) {
+        return v -> {
+            QtySet qtySet = qtyList.get(index);
+            if (plus && qty < 9 && qtySet.getQty() < 9) {
+                qtySet.operateQty(true);
+                qty++;
+            } else if (!plus && qty > 0 && qtySet.getQty() > 0) {
+                qtySet.operateQty(false);
+                qty--;
+            }
+            for (QtySet q : qtyList) {
+                if (qty == 9) q.setPlusDisable();
+                else q.setPlusEnable();
+                if (q.getQty() == 0) q.setMinusDisable();
+                else q.setMinusEnable();
+            }
+            String str = "총 " + qty + "명";
+            b.tvQty.setText(str);
+        };
     }
 
     private TextView makeSflText() {

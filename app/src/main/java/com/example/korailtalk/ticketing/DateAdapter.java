@@ -2,6 +2,7 @@ package com.example.korailtalk.ticketing;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.korailtalk.R;
 import com.example.korailtalk.Util;
+import com.example.korailtalk.databinding.RvDateBinding;
 
 import java.sql.Timestamp;
 
@@ -28,12 +30,13 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     private final TicketingFragment fragment;
     private final Timestamp[] timesArr;
     private int selectedPosition = 0;
-    private boolean onChange = true;
+    private final Context context;
 
     public DateAdapter(TicketingFragment fragment, Timestamp[] timesArr) {
         this.fragment = fragment;
         this.timesArr = timesArr;
         inflater = fragment.getLayoutInflater();
+        context = fragment.getContext();
     }
 
     @NonNull
@@ -46,33 +49,44 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     public void onBindViewHolder(@NonNull DateViewHolder holder, int position) {
         String week = Util.dateFormat(timesArr[position], "E");
         String day = Util.dateFormat(timesArr[position], "d");
-        holder.tvDay.setText(day);
+        holder.b.tvDay.setText(day);
         if (position != 0) {
-            holder.tvWeek.setText(week);
+            holder.b.tvWeek.setText(week);
+        } else {
+            holder.b.tvDepday.setVisibility(View.VISIBLE);
+            holder.b.ivToday.setVisibility(View.VISIBLE);
         }
 
         if (position == selectedPosition) {
-            holder.vBack.setVisibility(View.VISIBLE);
-            holder.tvDepday.setVisibility(View.VISIBLE);
-            holder.tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.white));
-            if (day.equals("1")) holder.ivSlash.setVisibility(View.INVISIBLE);
+            holder.b.vBack.setVisibility(View.VISIBLE);
+            holder.b.tvDepday.setVisibility(View.VISIBLE);
+            holder.b.tvDay.setTextColor(ContextCompat.getColor(context, R.color.white));
+            if (day.equals("1")) holder.b.ivSlash.setVisibility(View.INVISIBLE);
+            if (position == 0) {
+                holder.b.ivToday.setImageResource(R.drawable.ic_baseline_circle_24);
+                holder.b.tvDepday.setText("출발일");
+                holder.b.tvDepday.setTextColor(ContextCompat.getColor(context, R.color.white));
+            }
         } else {
-            holder.vBack.setVisibility(View.INVISIBLE);
-            holder.tvDepday.setVisibility(View.INVISIBLE);
-            holder.tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.black));
-            setColorWeek(holder.tvWeek, holder.tvDay, day);
-            if (day.equals("1")) holder.ivSlash.setVisibility(View.VISIBLE);
+            holder.b.vBack.setVisibility(View.INVISIBLE);
+            holder.b.tvDay.setTextColor(ContextCompat.getColor(context, R.color.black));
+            setColorWeek(holder.b.tvWeek, holder.b.tvDay, week);
+            if (day.equals("1")) holder.b.ivSlash.setVisibility(View.VISIBLE);
+            if (position == 0) {
+                holder.b.ivToday.setImageResource(R.drawable.ic_baseline_circle_main);
+                holder.b.tvDepday.setText("오늘");
+                holder.b.tvDepday.setTextColor(ContextCompat.getColor(context, R.color.main3));
+            } else holder.b.tvDepday.setVisibility(View.INVISIBLE);
         }
 
-        setColorWeek(holder.tvWeek, holder.tvDay, week);
-        if (day.equals("1")) {
-            holder.ivSlash.setVisibility(View.VISIBLE);
-            holder.tvMonth.setVisibility(View.VISIBLE);
-            holder.tvMonth.setText(Util.dateFormat(timesArr[position], "M"));
+        if (day.equals("1") && position != selectedPosition) {
+            holder.b.ivSlash.setVisibility(View.VISIBLE);
+            holder.b.tvMonth.setVisibility(View.VISIBLE);
+            holder.b.tvMonth.setText(Util.dateFormat(timesArr[position], "M"));
             if (week.equals("토"))
-                holder.tvMonth.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
+                holder.b.tvMonth.setTextColor(ContextCompat.getColor(context, R.color.skyblue));
             else if (week.equals("일"))
-                holder.tvMonth.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
+                holder.b.tvMonth.setTextColor(ContextCompat.getColor(context, R.color.red));
         }
     }
 
@@ -93,33 +107,27 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
     private void setColorWeek(TextView tvWeek, TextView tvDay, String week) {
         if (week.equals("토")) {
-            tvWeek.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
-            tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.skyblue));
+            tvWeek.setTextColor(ContextCompat.getColor(context, R.color.skyblue));
+            tvDay.setTextColor(ContextCompat.getColor(context, R.color.skyblue));
         } else if (week.equals("일")) {
-            tvWeek.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
-            tvDay.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.red));
+            tvWeek.setTextColor(ContextCompat.getColor(context, R.color.red));
+            tvDay.setTextColor(ContextCompat.getColor(context, R.color.red));
         }
     }
 
     public class DateViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvWeek, tvMonth, tvDay, tvDepday;
-        ImageView ivSlash, ivToday;
-        View vBack;
+        RvDateBinding b;
 
         public DateViewHolder(@NonNull View v) {
             super(v);
-            tvWeek = v.findViewById(R.id.tv_week);
-            tvMonth = v.findViewById(R.id.tv_month);
-            tvDay = v.findViewById(R.id.tv_day);
-            tvDepday = v.findViewById(R.id.tv_depday);
-            ivSlash = v.findViewById(R.id.iv_slash);
-            ivToday = v.findViewById(R.id.iv_today);
-            vBack = v.findViewById(R.id.v_back);
+            b = RvDateBinding.bind(v);
             v.setOnClickListener(view -> {
-                fragment.onDateClick(timesArr[getAdapterPosition()]);
-                selectedPosition = getAdapterPosition();
-                notifyDataSetChanged();
+                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                    fragment.onDateClick(timesArr[getAdapterPosition()], getAdapterPosition());
+                    selectedPosition = getAdapterPosition();
+                    notifyDataSetChanged();
+                }
             });
         }
 

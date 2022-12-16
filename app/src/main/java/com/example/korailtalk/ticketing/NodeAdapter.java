@@ -17,20 +17,18 @@ public class NodeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final LayoutInflater inflater;
     private final TicketingFragment fragment;
-    private final ArrayList<NodeForRv> nodeList;
+    private final ArrayList<NodeVO> nodeList;
 
     public NodeAdapter(TicketingFragment fragment) {
         this.fragment = fragment;
         inflater = fragment.getLayoutInflater();
         nodeList = NodeRoom.nodeListForRv;
-        setHasStableIds(true);
     }
 
-    public NodeAdapter(TicketingFragment fragment, ArrayList<NodeForRv> nodeList) {
+    public NodeAdapter(TicketingFragment fragment, ArrayList<NodeVO> nodeList) {
         this.fragment = fragment;
         inflater = fragment.getLayoutInflater();
         this.nodeList = nodeList;
-        setHasStableIds(true);
     }
 
     @NonNull
@@ -46,10 +44,10 @@ public class NodeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NodeViewHolder) {
-            ((NodeViewHolder) holder).tvNode1.setText(nodeList.get(position).node1);
-            ((NodeViewHolder) holder).tvNode2.setText(nodeList.get(position).node2);
+            ((NodeViewHolder) holder).tvNode1.setText(nodeList.get(position).getNode1());
+            ((NodeViewHolder) holder).tvNode2.setText(nodeList.get(position).getNode2());
         } else if (holder instanceof FlViewHolder) {
-            ((TextView) holder.itemView).setText(nodeList.get(position).node1);
+            ((TextView) holder.itemView).setText(nodeList.get(position).getNode1());
         }
     }
 

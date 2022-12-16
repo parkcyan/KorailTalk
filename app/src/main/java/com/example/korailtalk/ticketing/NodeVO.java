@@ -1,11 +1,11 @@
 package com.example.korailtalk.ticketing;
 
-public class NodeForRv {
+public class NodeVO {
 
-    String node1, node2;
-    int viewType;
+    private String node1, node2;
+    private int viewType;
 
-    public NodeForRv(String node1, String node2, int viewType) {
+    public NodeVO(String node1, String node2, int viewType) {
         this.node1 = node1;
         this.node2 = node2;
         this.viewType = viewType;

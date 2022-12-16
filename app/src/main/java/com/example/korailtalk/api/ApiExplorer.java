@@ -23,9 +23,7 @@ public class ApiExplorer {
     private ApiExplorer() {}
 
     public static ApiExplorer getInstance() {
-        if (instance == null) {
-            instance = new ApiExplorer();
-        }
+        if (instance == null) instance = new ApiExplorer();
         return instance;
     }
 

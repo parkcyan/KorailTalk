@@ -13,6 +13,7 @@
     <color name="main3">#528FBB</color>
     <color name="main4">#9EB1BF</color>
     <color name="main5">#B7CDDD</color>
+    <color name="main6">#DBE6ED</color>
     <color name="lightgray">#D8D8D8</color>
     <color name="gray">#BBBBBB</color>
     <color name="gray2">#969696</color>
@@ -22,4 +23,5 @@
     <color name="whitesmoke2">#F1F1F1</color>
     <color name="red">#FF0000</color>
     <color name="skyblue">#00B0FF</color>
+    <color name="aliceblue">#f0f8ff</color>
 </resources>

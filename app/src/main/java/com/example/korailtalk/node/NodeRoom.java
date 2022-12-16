@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.korailtalk.api.ApiExplorer;
-import com.example.korailtalk.ticketing.NodeForRv;
+import com.example.korailtalk.ticketing.NodeVO;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -20,7 +20,7 @@ public class NodeRoom {
     public static final int GET_NODE_SUCCESS = 1;
     public static final int SEARCH_SUCCESS = 1;
     public static final int GET_LIST_FOR_RV = 2;
-    public static final ArrayList<NodeForRv> nodeListForRv = new ArrayList<>();
+    public static final ArrayList<NodeVO> nodeListForRv = new ArrayList<>();
     private final NodeDAO nodeDAO;
     private final NodeDB nodeDB;
     private final int[] citycode = {11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 37, 38};
@@ -87,25 +87,25 @@ public class NodeRoom {
                 index += nodeDAO.getNodeCountBetween(searchStr[i], searchStr[i + 1]);
                 indexList.add(index);
             }
-            nodeListForRv.add(new NodeForRv(fl[0], null, 1));
-            nodeListForRv.add(new NodeForRv(fl[1], null, 1));
-            nodeListForRv.add(new NodeForRv(fl[2], null, 1));
+            nodeListForRv.add(new NodeVO(fl[0], null, 1));
+            nodeListForRv.add(new NodeVO(fl[1], null, 1));
+            nodeListForRv.add(new NodeVO(fl[2], null, 1));
             for (int i = 0; i < mainNodeList.size(); i += 2) {
                 if (i + 1 != mainNodeList.size()) {
-                    nodeListForRv.add(new NodeForRv(mainNodeList.get(i).nodename, mainNodeList.get(i + 1).nodename, 0));
+                    nodeListForRv.add(new NodeVO(mainNodeList.get(i).nodename, mainNodeList.get(i + 1).nodename, 0));
                 } else {
-                    nodeListForRv.add(new NodeForRv(mainNodeList.get(i).nodename, "", 0));
+                    nodeListForRv.add(new NodeVO(mainNodeList.get(i).nodename, "", 0));
                 }
             }
             int flIndex = 3;
             for (int i = 0; i < allNodeList.size();) {
                 if (indexList.contains(i)) {
-                    nodeListForRv.add(new NodeForRv(fl[flIndex++], null, 1));
+                    nodeListForRv.add(new NodeVO(fl[flIndex++], null, 1));
                 }
                 if (!indexList.contains(i + 1)) {
-                    nodeListForRv.add(new NodeForRv(allNodeList.get(i++).nodename, allNodeList.get(i++).nodename, 0));
+                    nodeListForRv.add(new NodeVO(allNodeList.get(i++).nodename, allNodeList.get(i++).nodename, 0));
                 } else {
-                    nodeListForRv.add(new NodeForRv(allNodeList.get(i++).nodename, "", 0));
+                    nodeListForRv.add(new NodeVO(allNodeList.get(i++).nodename, "", 0));
                 }
             }
             Log.d(TAG, "nodeRoom: GET_LIST_FOR_RV");
@@ -118,12 +118,12 @@ public class NodeRoom {
             if (str.equals("")) handler.obtainMessage(SEARCH_SUCCESS, null);
             else {
                 ArrayList<Node> searchList = (ArrayList<Node>) nodeDAO.searchNodes(str);
-                ArrayList<NodeForRv> searchListForRv = new ArrayList<>();
+                ArrayList<NodeVO> searchListForRv = new ArrayList<>();
                 for (int i = 0; i < searchList.size(); i++) {
                     if (i + 1 != searchList.size()) {
-                        searchListForRv.add(new NodeForRv(searchList.get(i).nodename, searchList.get(i + 1).nodename, 2));
+                        searchListForRv.add(new NodeVO(searchList.get(i).nodename, searchList.get(i + 1).nodename, 2));
                         i++;
-                    } else searchListForRv.add(new NodeForRv(searchList.get(i).nodename, "", 2));
+                    } else searchListForRv.add(new NodeVO(searchList.get(i).nodename, "", 2));
                 }
                 handler.sendMessage(handler.obtainMessage(SEARCH_SUCCESS, searchListForRv));
             }
