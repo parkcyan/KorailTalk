@@ -22,6 +22,9 @@ public interface NodeDAO {
     @Query("select * from node where mainnode = 1")
     List<Node> getMainNodes();
 
+    @Query("select nodeid from node where nodename = :nodeName")
+    String getNodeid(String nodeName);
+
     @Query("select * from node where nodename like '%' || :str || '%' order by nodename")
     List<Node> searchNodes(String str);
 

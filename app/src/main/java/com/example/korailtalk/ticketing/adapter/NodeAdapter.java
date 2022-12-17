@@ -1,4 +1,4 @@
-package com.example.korailtalk.ticketing;
+package com.example.korailtalk.ticketing.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.korailtalk.R;
 import com.example.korailtalk.node.NodeRoom;
+import com.example.korailtalk.ticketing.data.NodeVO;
+import com.example.korailtalk.ticketing.TicketingFragment;
 
 import java.util.ArrayList;
 

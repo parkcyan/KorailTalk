@@ -1,16 +1,9 @@
-package com.example.korailtalk.ticketing;
-
-import static android.content.ContentValues.TAG;
+package com.example.korailtalk.ticketing.adapter;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.korailtalk.R;
 import com.example.korailtalk.Util;
 import com.example.korailtalk.databinding.RvDateBinding;
+import com.example.korailtalk.ticketing.TicketingFragment;
 
 import java.sql.Timestamp;
 

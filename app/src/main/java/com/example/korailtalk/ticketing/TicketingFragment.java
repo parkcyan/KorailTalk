@@ -1,6 +1,7 @@
 package com.example.korailtalk.ticketing;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +32,11 @@ import com.example.korailtalk.node.NodeRoom;
 import com.example.korailtalk.MainActivity;
 import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.FragmentTicketingBinding;
+import com.example.korailtalk.ticketing.adapter.DateAdapter;
+import com.example.korailtalk.ticketing.adapter.NodeAdapter;
+import com.example.korailtalk.ticketing.adapter.TimeAdapter;
+import com.example.korailtalk.ticketing.data.NodeVO;
+import com.example.korailtalk.ticketing.data.QtySet;
 import com.google.android.material.tabs.TabLayout;
 
 import java.sql.Timestamp;
@@ -55,6 +60,7 @@ public class TicketingFragment extends Fragment {
     private final ArrayList<QtySet> qtyList = new ArrayList<>();
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
+    private final int[] qtyArr = {1, 0, 0, 0, 0, 0};
     private final Calendar cal = Calendar.getInstance();
     private Timestamp tsDate = Util.getCurrentTime();
 
@@ -141,6 +147,9 @@ public class TicketingFragment extends Fragment {
             qtyList.get(i).getQtyPls().setOnClickListener(operateQty(i, true));
             qtyList.get(i).getQtyMin().setOnClickListener(operateQty(i, false));
         }
+
+        /* 간편구매 & 조회하기 */
+        b.tvLookup.setOnClickListener(onClickLookup());
 
         return b.getRoot();
     }
@@ -349,7 +358,7 @@ public class TicketingFragment extends Fragment {
                     b.llDateContent.setVisibility(View.VISIBLE);
                     b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
                     b.ivDateexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
-                    b.llDateContent.post(() -> b.svTic.smoothScrollTo(0, b.llDateContent.getTop()));
+                    b.llDateContent.post(() -> b.svTic.smoothScrollTo(0, Util.getScrollPosition(b.svTic, b.llDate)));
                 } else {
                     b.llDateContent.setVisibility(View.GONE);
                     b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.whitesmoke));
@@ -360,6 +369,7 @@ public class TicketingFragment extends Fragment {
                     b.llQtyContent.setVisibility(View.VISIBLE);
                     b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
                     b.ivQtyexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
+                    b.llQtyContent.post(() -> b.svTic.smoothScrollTo(0, Util.getScrollPosition(b.svTic, b.llQty)));
                 } else {
                     b.llQtyContent.setVisibility(View.GONE);
                     b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.whitesmoke));
@@ -403,24 +413,63 @@ public class TicketingFragment extends Fragment {
         return true;
     }
 
+    private int getCompanionQty() {
+        // 보호자
+        return qtyArr[0] + qtyArr[3] + qtyArr[4] + qtyArr[5];
+    }
+
     private View.OnClickListener operateQty(int index, boolean plus) {
         return v -> {
-            QtySet qtySet = qtyList.get(index);
-            if (plus && qty < 9 && qtySet.getQty() < 9) {
-                qtySet.operateQty(true);
-                qty++;
-            } else if (!plus && qty > 0 && qtySet.getQty() > 0) {
-                qtySet.operateQty(false);
-                qty--;
+            if (index == 2 && plus && getCompanionQty() == 0) {
+                new MyDialog(context, getLayoutInflater(), "이용안내",
+                        "유아(만 6세 미만)는 반드시 보호자를 함께 선택해야 합니다.").show();
+            } else if (index != 1 && index != 2 && !plus && qtyArr[2] >= 1 && getCompanionQty() == 1) {
+                new MyDialog(context, getLayoutInflater(), "이용안내",
+                        "유아(만 6세 미만)는 반드시 보호자를 함께 선택해야 합니다.").show();
+            } else {
+                QtySet qtySet = qtyList.get(index);
+                if (plus && qty < 9 && qtySet.getQty() < 9) {
+                    qtySet.operateQty(true);
+                    qty++;
+                    qtyArr[index] = qtyList.get(index).getQty();
+                    if (qty == 1) {
+                        b.tvLookup.setBackgroundColor(ContextCompat.getColor(context, R.color.main5));
+                        b.tvLookup.setTextColor(ContextCompat.getColor(context, R.color.main));
+                    }
+                } else if (!plus && qty > 0 && qtySet.getQty() > 0) {
+                    qtySet.operateQty(false);
+                    qty--;
+                    qtyArr[index] = qtyList.get(index).getQty();
+                    if (qty == 0) {
+                        b.tvLookup.setBackgroundColor(ContextCompat.getColor(context, R.color.aliceblue));
+                        b.tvLookup.setTextColor(ContextCompat.getColor(context, R.color.main5));
+                    }
+                }
+                for (QtySet q : qtyList) {
+                    if (qty == 9) q.setPlusDisable();
+                    else q.setPlusEnable();
+                    if (q.getQty() == 0) q.setMinusDisable();
+                    else q.setMinusEnable();
+                }
+                String str = "총 " + qty + "명";
+                b.tvQty.setText(str);
             }
-            for (QtySet q : qtyList) {
-                if (qty == 9) q.setPlusDisable();
-                else q.setPlusEnable();
-                if (q.getQty() == 0) q.setMinusDisable();
-                else q.setMinusEnable();
+        };
+    }
+
+    private View.OnClickListener onClickLookup() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (qty != 0) {
+                    Intent intent = new Intent(getActivity(), LookupActivity.class);
+                    intent.putExtra("depNode", b.tvDep.getText().toString());
+                    intent.putExtra("arrNode", b.tvArr.getText().toString());
+                    intent.putExtra("qtyArr", qtyArr);
+                    intent.putExtra("date", tsDate);
+                    startActivity(intent);
+                }
             }
-            String str = "총 " + qty + "명";
-            b.tvQty.setText(str);
         };
     }
 

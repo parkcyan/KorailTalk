@@ -1,6 +1,7 @@
 package com.example.korailtalk;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.korailtalk.ticketing.TicketingFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -44,6 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract String setToolbarTitle();
 
-    protected abstract int getLayoutResource();
+    protected abstract View getLayoutResource();
 
 }

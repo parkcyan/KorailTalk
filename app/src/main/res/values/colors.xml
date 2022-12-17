@@ -23,5 +23,6 @@
     <color name="whitesmoke2">#F1F1F1</color>
     <color name="red">#FF0000</color>
     <color name="skyblue">#00B0FF</color>
+    <color name="skyblue2">#C6EFF5</color>
     <color name="aliceblue">#f0f8ff</color>
 </resources>

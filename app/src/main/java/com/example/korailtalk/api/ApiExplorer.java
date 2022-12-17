@@ -1,5 +1,7 @@
 package com.example.korailtalk.api;
 
+import static android.content.ContentValues.TAG;
+
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -33,6 +35,22 @@ public class ApiExplorer {
                 .append("&" + URLEncoder.encode("numOfRows",ENCODE) + "=" + URLEncoder.encode("100", ENCODE))
                 .append("&" + URLEncoder.encode("_type", ENCODE) + "=" + URLEncoder.encode(DATA_TYPE, ENCODE))
                 .append("&" + URLEncoder.encode("cityCode", ENCODE) + "=" + URLEncoder.encode(Integer.toString(city), ENCODE)); /* 시/도 ID */
+        JSONObject json = connect(urlBuilder)
+                .getJSONObject("response")
+                .getJSONObject("body")
+                .getJSONObject("items");
+        return json.getJSONArray("item");
+    }
+
+    public JSONArray getTrain(String depPlaceId, String arrPlaceId, int depPlandTime, int pageNo) throws IOException, JSONException {
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", ENCODE) + "=" + SERVICE_KEY)
+                .append("&" + URLEncoder.encode("pageNo",ENCODE) + "=" + pageNo)
+                .append("&" + URLEncoder.encode("numOfRows", ENCODE) + "=" + 30)
+                .append("&" + URLEncoder.encode("_type", ENCODE) + "=" + URLEncoder.encode(DATA_TYPE, ENCODE))
+                .append("&" + URLEncoder.encode("depPlaceId", ENCODE) + "=" + URLEncoder.encode(depPlaceId, ENCODE))
+                .append("&" + URLEncoder.encode("arrPlaceId", ENCODE) + "=" + URLEncoder.encode(arrPlaceId, ENCODE))
+                .append("&" + URLEncoder.encode("depPlandTime", ENCODE) + "=" + depPlandTime);
         JSONObject json = connect(urlBuilder)
                 .getJSONObject("response")
                 .getJSONObject("body")

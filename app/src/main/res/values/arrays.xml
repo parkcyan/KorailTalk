@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="train">
+        <item>KTX</item>
+        <item>새마을</item>
+        <item>무궁화</item>
+        <item>ITX-청춘</item>
+        <item>통근열차</item>
+    </string-array>
+
+    <string-array name="seat">
+        <item>일반석</item>
+        <item>2층석</item>
+        <item>유아동반</item>
+        <item>수동휠체어석</item>
+        <item>전동휠체어석</item>
+        <item>자전거</item>
+        <item>대피도우미</item>
+    </string-array>
+
+    <string-array name="trans">
+        <item>직통</item>
+        <item>환승</item>
+
+    </string-array>
+</resources>

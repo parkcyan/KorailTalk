@@ -12,7 +12,8 @@ import java.util.Locale;
 
 public class Util {
 
-    private Util() {}
+    private Util() {
+    }
 
     public static String dateFormat(Timestamp time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
@@ -41,6 +42,14 @@ public class Util {
         rv.setLayoutManager(lm);
         rv.setHasFixedSize(true);
         rv.setItemAnimator(null);
+    }
+
+    public static int getScrollPosition(View scrollView, View view) {
+        int[] svLocation = new int[2];
+        int[] viewLocation = new int[2];
+        scrollView.getLocationInWindow(svLocation);
+        view.getLocationInWindow(viewLocation);
+        return viewLocation[1] - svLocation[1] + scrollView.getScrollY();
     }
 
     public static void changeInvisible(View[] viewArr, int visibility) {

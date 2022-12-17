@@ -7,11 +7,14 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.korailtalk.api.ApiExplorer;
-import com.example.korailtalk.ticketing.NodeVO;
+import com.example.korailtalk.ticketing.data.NodeVO;
+import com.example.korailtalk.ticketing.data.TrainVO;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,6 +23,9 @@ public class NodeRoom {
     public static final int GET_NODE_SUCCESS = 1;
     public static final int SEARCH_SUCCESS = 1;
     public static final int GET_LIST_FOR_RV = 2;
+
+    public static final int GET_TRAIN_SUCCESS= 1;
+    public static final int GET_TRAIN_FAILED = -1;
     public static final ArrayList<NodeVO> nodeListForRv = new ArrayList<>();
     private final NodeDAO nodeDAO;
     private final NodeDB nodeDB;
@@ -61,15 +67,15 @@ public class NodeRoom {
             try {
                 if (hasTable()) nodeDAO.truncate();
                 for (int city : citycode) {
-                    JSONArray nodeArray = apiExplorer.getNode(city);
-                    for (int i = 0; i < nodeArray.length(); i++) {
-                        Node node = new Gson().fromJson(nodeArray.getJSONObject(i).toString(), Node.class);
+                    JSONArray nodeArr = apiExplorer.getNode(city);
+                    for (int i = 0; i < nodeArr.length(); i++) {
+                        Node node = new Gson().fromJson(nodeArr.getJSONObject(i).toString(), Node.class);
                         node.mainnode = Arrays.asList(mainnode).contains(node.nodename);
                         nodeDB.getNodeDAO().insert(node);
                     }
                 }
                 handler.sendMessage(handler.obtainMessage(GET_NODE_SUCCESS, 1));
-            } catch (Exception e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
@@ -126,6 +132,28 @@ public class NodeRoom {
                     } else searchListForRv.add(new NodeVO(searchList.get(i).nodename, "", 2));
                 }
                 handler.sendMessage(handler.obtainMessage(SEARCH_SUCCESS, searchListForRv));
+            }
+        }).start();
+    }
+
+    public void getTrainFromApi(String depNode, String arrNode, int depDate, int pageNo) {
+        new Thread(() -> {
+            String[] nodeidArr = new String[2];
+            nodeidArr[0] = nodeDAO.getNodeid(depNode);
+            nodeidArr[1] = nodeDAO.getNodeid(arrNode);
+            try {
+                JSONArray trainArr = apiExplorer.getTrain(nodeidArr[0], nodeidArr[1], depDate, pageNo);
+                ArrayList<TrainVO> trainList = new ArrayList<>();
+                for (int i = 0; i < trainArr.length(); i++) {
+                    Train train = new Gson().fromJson(trainArr.getJSONObject(i).toString(), Train.class);
+                    trainList.add(new TrainVO(train));
+                }
+                handler.sendMessage(handler.obtainMessage(GET_TRAIN_SUCCESS, trainList));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            } catch (JSONException e) {
+                handler.sendMessage(handler.obtainMessage(GET_TRAIN_FAILED, null));
             }
         }).start();
     }

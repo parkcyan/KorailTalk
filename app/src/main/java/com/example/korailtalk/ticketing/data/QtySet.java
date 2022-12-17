@@ -1,4 +1,4 @@
-package com.example.korailtalk.ticketing;
+package com.example.korailtalk.ticketing.data;
 
 import android.widget.ImageButton;
 import android.widget.TextView;

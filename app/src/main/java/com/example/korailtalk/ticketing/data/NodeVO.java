@@ -1,4 +1,4 @@
-package com.example.korailtalk.ticketing;
+package com.example.korailtalk.ticketing.data;
 
 public class NodeVO {
 

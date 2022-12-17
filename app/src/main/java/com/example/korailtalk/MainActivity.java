@@ -7,20 +7,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.example.korailtalk.databinding.ActivityMainBinding;
 import com.example.korailtalk.ticketing.TicketingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends BaseActivity {
 
-    BottomNavigationView bnv_main;
+    ActivityMainBinding b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bnv_main = findViewById(R.id.bnv_main);
+        setBnv();
+    }
+
+    private void setBnv() {
         newFragment(R.id.container_main, new TicketingFragment());
-        bnv_main.setOnItemSelectedListener(item -> {
+        b.bnvMain.bnvMain.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bnv_main_tic) {
                 newFragment(R.id.container_main, new TicketingFragment());
             } else if (item.getItemId() == R.id.bnv_main_seasontic) {
@@ -35,8 +39,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showBnv(boolean show) {
-        if (show) {bnv_main.setVisibility(View.VISIBLE);}
-        else bnv_main.setVisibility(View.GONE);
+        if (show) {b.bnvMain.bnvMain.setVisibility(View.VISIBLE);}
+        else b.bnvMain.bnvMain.setVisibility(View.GONE);
     }
 
     @Override
@@ -45,8 +49,9 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_main;
+    protected View getLayoutResource() {
+        b = ActivityMainBinding.inflate(getLayoutInflater());
+        return b.getRoot();
     }
 
 }

@@ -10,6 +10,7 @@
        android:layout_width="80dp"
        android:layout_height="80dp"
        android:layout_centerInParent="true"
-       android:indeterminateOnly="true"/>
+       android:indeterminateOnly="true"
+       android:indeterminateTint="@color/skyblue"/>
 
 </RelativeLayout>
