@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="이용안내"
-        android:textSize="25sp"
+        android:textSize="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginHorizontal="20dp"
         android:textColor="@color/main"/>
@@ -29,7 +29,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="15dp"
-        android:textSize="20sp"/>
+        android:textSize="18dp"/>
 
     <TextView
         android:id="@+id/tv_confirm"
@@ -38,8 +38,8 @@
         android:text="확인"
         android:textColor="@color/main"
         android:gravity="center"
-        android:textSize="20sp"
-        android:background="@color/main5" />
+        android:textSize="18dp"
+        android:background="@color/main6" />
 
 
 </LinearLayout>

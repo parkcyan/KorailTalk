@@ -817,9 +817,8 @@
     <LinearLayout
         android:id="@+id/ll_select"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.9"
-        android:background="@color/main5"
+        android:layout_height="70dp"
+        android:background="@color/main6"
         android:orientation="horizontal" >
 
         <TextView
@@ -828,7 +827,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="간편구매"
-            android:textSize="29sp"
+            android:textSize="24dp"
             android:textColor="@color/main"
             android:gravity="center"/>
 
@@ -843,7 +842,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="열차 조회하기"
-            android:textSize="29sp"
+            android:textSize="24dp"
             android:textColor="@color/main"
             android:gravity="center"/>
 

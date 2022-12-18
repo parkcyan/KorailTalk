@@ -1,13 +1,18 @@
 package com.example.korailtalk;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class Util {
@@ -32,6 +37,24 @@ public class Util {
 
     public static Timestamp getCurrentTime() {
         return new Timestamp(System.currentTimeMillis());
+    }
+
+    public static Timestamp getTimestmpFromDouble(double time) {
+        BigDecimal bd = BigDecimal.valueOf(time);
+        StringBuilder ts = new StringBuilder();
+        StringBuilder sb = new StringBuilder(bd.toPlainString());
+        // 20221201061200 -> 2022-12-01 06:12:00
+        ts.append(sb.substring(0, 4)).append("-").append(sb.substring(4, 6)).append("-").append(sb.substring(6, 8))
+                .append(" ").append(sb.substring(8, 10)).append(":").append(sb.substring(10, 12)).append(":")
+                .append(sb.substring(12));
+        return Timestamp.valueOf(ts.toString());
+    }
+
+    public static Timestamp timestampOperator(Timestamp time, int date, int number) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        cal.add(date, number);
+        return new Timestamp(cal.getTime().getTime());
     }
 
     public static void setRecyclerView(Context context, RecyclerView rv, RecyclerView.Adapter<?> adapter, boolean orientation) {

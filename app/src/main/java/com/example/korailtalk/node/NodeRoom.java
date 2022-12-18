@@ -6,15 +6,17 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.example.korailtalk.Util;
 import com.example.korailtalk.api.ApiExplorer;
 import com.example.korailtalk.ticketing.data.NodeVO;
-import com.example.korailtalk.ticketing.data.TrainVO;
+import com.example.korailtalk.ticketing.data.TrainRvVO;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,7 +26,7 @@ public class NodeRoom {
     public static final int SEARCH_SUCCESS = 1;
     public static final int GET_LIST_FOR_RV = 2;
 
-    public static final int GET_TRAIN_SUCCESS= 1;
+    public static final int GET_TRAIN_SUCCESS = 1;
     public static final int GET_TRAIN_FAILED = -1;
     public static final ArrayList<NodeVO> nodeListForRv = new ArrayList<>();
     private final NodeDAO nodeDAO;
@@ -104,7 +106,7 @@ public class NodeRoom {
                 }
             }
             int flIndex = 3;
-            for (int i = 0; i < allNodeList.size();) {
+            for (int i = 0; i < allNodeList.size(); ) {
                 if (indexList.contains(i)) {
                     nodeListForRv.add(new NodeVO(fl[flIndex++], null, 1));
                 }
@@ -136,17 +138,19 @@ public class NodeRoom {
         }).start();
     }
 
-    public void getTrainFromApi(String depNode, String arrNode, int depDate, int pageNo) {
+    public void getTrainFromApi(String depNode, String arrNode, Timestamp tsDate) {
         new Thread(() -> {
             String[] nodeidArr = new String[2];
             nodeidArr[0] = nodeDAO.getNodeid(depNode);
             nodeidArr[1] = nodeDAO.getNodeid(arrNode);
             try {
-                JSONArray trainArr = apiExplorer.getTrain(nodeidArr[0], nodeidArr[1], depDate, pageNo);
-                ArrayList<TrainVO> trainList = new ArrayList<>();
+                JSONArray trainArr = apiExplorer.getTrain(nodeidArr[0], nodeidArr[1], Util.dateFormatInt(tsDate, "yyyyMMdd"), 1);
+                ArrayList<TrainRvVO> trainList = new ArrayList<>();
                 for (int i = 0; i < trainArr.length(); i++) {
                     Train train = new Gson().fromJson(trainArr.getJSONObject(i).toString(), Train.class);
-                    trainList.add(new TrainVO(train));
+                    if (Util.getTimestmpFromDouble(train.getDepplandtime()).getTime() > tsDate.getTime()) {
+                        trainList.add(new TrainRvVO(train));
+                    }
                 }
                 handler.sendMessage(handler.obtainMessage(GET_TRAIN_SUCCESS, trainList));
             } catch (IOException e) {

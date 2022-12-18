@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="train">
+    <string-array name="grade">
+        <item>전체</item>
         <item>KTX</item>
         <item>새마을</item>
         <item>무궁화</item>

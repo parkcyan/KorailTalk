@@ -61,7 +61,6 @@ public class TicketingFragment extends Fragment {
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
     private final int[] qtyArr = {1, 0, 0, 0, 0, 0};
-    private final Calendar cal = Calendar.getInstance();
     private Timestamp tsDate = Util.getCurrentTime();
 
 
@@ -122,8 +121,8 @@ public class TicketingFragment extends Fragment {
         setDate();
         b.llDate.setOnClickListener(optionClick());
 
+        Calendar cal = Calendar.getInstance();
         Timestamp[] timesArr = new Timestamp[31];
-
         timesArr[0] = tsDate;
         for (int i = 1; i < timesArr.length; i++) {
             cal.add(Calendar.DATE, 1);
@@ -442,7 +441,7 @@ public class TicketingFragment extends Fragment {
                     qtyArr[index] = qtyList.get(index).getQty();
                     if (qty == 0) {
                         b.tvLookup.setBackgroundColor(ContextCompat.getColor(context, R.color.aliceblue));
-                        b.tvLookup.setTextColor(ContextCompat.getColor(context, R.color.main5));
+                        b.tvLookup.setTextColor(ContextCompat.getColor(context, R.color.main6));
                     }
                 }
                 for (QtySet q : qtyList) {
@@ -462,12 +461,17 @@ public class TicketingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (qty != 0) {
-                    Intent intent = new Intent(getActivity(), LookupActivity.class);
-                    intent.putExtra("depNode", b.tvDep.getText().toString());
-                    intent.putExtra("arrNode", b.tvArr.getText().toString());
-                    intent.putExtra("qtyArr", qtyArr);
-                    intent.putExtra("date", tsDate);
-                    startActivity(intent);
+                    if (b.tvDep.getText().toString().equals(b.tvArr.getText().toString())) {
+                        new MyDialog(context, getLayoutInflater(), "이용안내", "출발역과 도착역이 같습니다.\n다시 확인해주세요.")
+                                .show();
+                    } else {
+                        Intent intent = new Intent(getActivity(), LookupActivity.class);
+                        intent.putExtra("depNode", b.tvDep.getText().toString());
+                        intent.putExtra("arrNode", b.tvArr.getText().toString());
+                        intent.putExtra("qtyArr", qtyArr);
+                        intent.putExtra("date", tsDate);
+                        startActivity(intent);
+                    }
                 }
             }
         };

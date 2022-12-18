@@ -6,16 +6,17 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
 
-public class TrainVO {
+public class TrainRvVO {
 
     private String depplacename, arrplacename, traingradename, trainno, depplandtime, arrplandtime;
-    private int adultcharge;
+    private String adultcharge, adultscharge;
 
-    public TrainVO(Train train) {
+    public TrainRvVO(Train train) {
         DecimalFormat df = new DecimalFormat("000000");
+        DecimalFormat chargeDf = new DecimalFormat("###,###원");
         depplacename = train.getDepplacename();
         arrplacename = train.getArrplacename();
-        adultcharge = train.getAdultcharge();
+        adultcharge = chargeDf.format(train.getAdultcharge());
         if (train.getTrainno() < 10) trainno = "00" + train.getTrainno();
         else if (train.getTrainno() < 100) trainno = "0" + train.getTrainno();
         else trainno = String.valueOf(train.getTrainno());
@@ -29,6 +30,9 @@ public class TrainVO {
         arrplandtime = asb.insert(2, ":").toString();
         if (train.getTraingradename().contains("KTX-산천")) traingradename = "KTX-산천";
         else traingradename = train.getTraingradename();
+        if (traingradename.contains("KTX")) adultscharge = chargeDf.format(train.getAdultcharge() * 1.4);
+        if (adultcharge.equals("0원")) adultcharge = "매진";
+        if (adultscharge != null && adultscharge.equals("0원")) adultscharge = "매진";
     }
 
     public String getDepplacename() {
@@ -43,7 +47,7 @@ public class TrainVO {
         return traingradename;
     }
 
-    public int getAdultcharge() {
+    public String getAdultcharge() {
         return adultcharge;
     }
 
@@ -57,5 +61,9 @@ public class TrainVO {
 
     public String getArrplandtime() {
         return arrplandtime;
+    }
+
+    public String getAdultscharge() {
+        return adultscharge;
     }
 }

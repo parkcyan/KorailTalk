@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="툴바 제목"
-            android:textSize="21dp"
+            android:textSize="18dp"
             android:textColor="@color/main"
             android:layout_centerInParent="true" />
 

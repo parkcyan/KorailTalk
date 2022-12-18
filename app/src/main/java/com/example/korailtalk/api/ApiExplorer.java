@@ -46,7 +46,7 @@ public class ApiExplorer {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo");
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", ENCODE) + "=" + SERVICE_KEY)
                 .append("&" + URLEncoder.encode("pageNo",ENCODE) + "=" + pageNo)
-                .append("&" + URLEncoder.encode("numOfRows", ENCODE) + "=" + 30)
+                .append("&" + URLEncoder.encode("numOfRows", ENCODE) + "=" + 300)
                 .append("&" + URLEncoder.encode("_type", ENCODE) + "=" + URLEncoder.encode(DATA_TYPE, ENCODE))
                 .append("&" + URLEncoder.encode("depPlaceId", ENCODE) + "=" + URLEncoder.encode(depPlaceId, ENCODE))
                 .append("&" + URLEncoder.encode("arrPlaceId", ENCODE) + "=" + URLEncoder.encode(arrPlaceId, ENCODE))
