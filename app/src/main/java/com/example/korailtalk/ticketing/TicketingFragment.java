@@ -15,6 +15,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -73,12 +74,12 @@ public class TicketingFragment extends Fragment {
 
         nodeRoom = new NodeRoom(context, getNodeHandler());
 
-        /* 탭 */
+        // 탭
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("편도"));
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("왕복"));
         b.tlRoundTrip.addOnTabSelectedListener(onTabSelect());
 
-        /* 역 선택창 */
+        // 역 선택창
         b.llNodefold.setOnClickListener(view -> nodeFold());
 
         adapter = new NodeAdapter(fragment);
@@ -113,11 +114,12 @@ public class TicketingFragment extends Fragment {
         b.etNode.addTextChangedListener(edtTextChange());
         b.ivNodeclear.setOnClickListener(view -> b.etNode.setText(""));
 
-        /* 역 확인창 */
+        // 역 확인창
         b.rlDep.setOnClickListener(onCityClick());
         b.rlArr.setOnClickListener(onCityClick());
+        b.ivNodechange.setOnClickListener(onCityChange());
 
-        /* 출발일 */
+        // 출발일
         setDate();
         b.llDate.setOnClickListener(optionClick());
 
@@ -134,7 +136,7 @@ public class TicketingFragment extends Fragment {
         Util.setRecyclerView(context, b.rvTime, new TimeAdapter(this, hour), false);
         ((LinearLayoutManager) b.rvTime.getLayoutManager()).scrollToPositionWithOffset(hour, 0);
 
-        /* 수량 */
+        // 수량
         b.llQty.setOnClickListener(optionClick());
         qtyList.add(new QtySet(1, b.tvQty1, b.ibQty1min, b.ibQty1pls));
         qtyList.add(new QtySet(0, b.tvQty2, b.ibQty2min, b.ibQty2pls));
@@ -147,7 +149,7 @@ public class TicketingFragment extends Fragment {
             qtyList.get(i).getQtyMin().setOnClickListener(operateQty(i, false));
         }
 
-        /* 간편구매 & 조회하기 */
+        // 간편구매 & 조회하기
         b.tvLookup.setOnClickListener(onClickLookup());
 
         return b.getRoot();
@@ -227,6 +229,14 @@ public class TicketingFragment extends Fragment {
         else b.tvArr.setText(node);
         b.etNode.setText("");
         nodeFold();
+    }
+
+    private View.OnClickListener onCityChange() {
+        return view -> {
+            String temp = b.tvArr.getText().toString();
+            b.tvArr.setText(b.tvDep.getText().toString());
+            b.tvDep.setText(temp);
+        };
     }
 
     private TextWatcher edtTextChange() {
@@ -355,7 +365,7 @@ public class TicketingFragment extends Fragment {
             if (view.getId() == R.id.ll_date) {
                 if (b.llDateContent.getVisibility() == View.GONE) {
                     b.llDateContent.setVisibility(View.VISIBLE);
-                    b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
+                    b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.skyblue2));
                     b.ivDateexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
                     b.llDateContent.post(() -> b.svTic.smoothScrollTo(0, Util.getScrollPosition(b.svTic, b.llDate)));
                 } else {
@@ -366,7 +376,7 @@ public class TicketingFragment extends Fragment {
             } else if (view.getId() == R.id.ll_qty) {
                 if (b.llQtyContent.getVisibility() == View.GONE) {
                     b.llQtyContent.setVisibility(View.VISIBLE);
-                    b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
+                    b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.skyblue2));
                     b.ivQtyexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
                     b.llQtyContent.post(() -> b.svTic.smoothScrollTo(0, Util.getScrollPosition(b.svTic, b.llQty)));
                 } else {
@@ -432,7 +442,7 @@ public class TicketingFragment extends Fragment {
                     qty++;
                     qtyArr[index] = qtyList.get(index).getQty();
                     if (qty == 1) {
-                        b.tvLookup.setBackgroundColor(ContextCompat.getColor(context, R.color.main5));
+                        b.tvLookup.setBackgroundColor(ContextCompat.getColor(context, R.color.main6));
                         b.tvLookup.setTextColor(ContextCompat.getColor(context, R.color.main));
                     }
                 } else if (!plus && qty > 0 && qtySet.getQty() > 0) {
@@ -482,7 +492,7 @@ public class TicketingFragment extends Fragment {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
         lp.weight = 1;
         tv.setTextColor(ContextCompat.getColor(context, R.color.gray3));
-        tv.setTextSize(11);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
         tv.setGravity(Gravity.CENTER);
         tv.setLayoutParams(lp);
         return tv;

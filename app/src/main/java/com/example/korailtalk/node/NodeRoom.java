@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.korailtalk.Util;
 import com.example.korailtalk.api.ApiExplorer;
 import com.example.korailtalk.ticketing.data.NodeVO;
+import com.example.korailtalk.ticketing.data.TrainVO;
 import com.example.korailtalk.ticketing.data.TrainRvVO;
 import com.google.gson.Gson;
 
@@ -147,9 +148,9 @@ public class NodeRoom {
                 JSONArray trainArr = apiExplorer.getTrain(nodeidArr[0], nodeidArr[1], Util.dateFormatInt(tsDate, "yyyyMMdd"), 1);
                 ArrayList<TrainRvVO> trainList = new ArrayList<>();
                 for (int i = 0; i < trainArr.length(); i++) {
-                    Train train = new Gson().fromJson(trainArr.getJSONObject(i).toString(), Train.class);
-                    if (Util.getTimestmpFromDouble(train.getDepplandtime()).getTime() > tsDate.getTime()) {
-                        trainList.add(new TrainRvVO(train));
+                    TrainVO trainVO = new Gson().fromJson(trainArr.getJSONObject(i).toString(), TrainVO.class);
+                    if (Util.getTimestmpFromDouble(trainVO.getDepplandtime()).getTime() > tsDate.getTime()) {
+                        trainList.add(new TrainRvVO(trainVO));
                     }
                 }
                 handler.sendMessage(handler.obtainMessage(GET_TRAIN_SUCCESS, trainList));

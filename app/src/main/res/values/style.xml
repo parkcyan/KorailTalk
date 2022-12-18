@@ -2,7 +2,7 @@
 <resources>
     <!-- tab -->
     <style name="tabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">18dp</item>
     </style>
 
     <style name="tvstyle_nodeselect" parent="Widget.AppCompat.TextView">

@@ -20,6 +20,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setBnv();
+        b.toolbar.ivBack.setVisibility(View.INVISIBLE);
     }
 
     private void setBnv() {
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showBnv(boolean show) {
-        if (show) {b.bnvMain.bnvMain.setVisibility(View.VISIBLE);}
+        if (show) b.bnvMain.bnvMain.setVisibility(View.VISIBLE);
         else b.bnvMain.bnvMain.setVisibility(View.GONE);
     }
 

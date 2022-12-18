@@ -58,7 +58,7 @@
                             android:gravity="center"
                             android:text="출발"
                             android:textColor="@color/gray3"
-                            android:textSize="18sp" />
+                            android:textSize="15dp" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -67,14 +67,18 @@
                             android:gravity="center"
                             android:text="도착"
                             android:textColor="@color/gray3"
-                            android:textSize="18sp" />
+                            android:textSize="15dp" />
 
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/iv_nodechange"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
                         android:layout_centerInParent="true"
+                        android:paddingHorizontal="10dp"
+                        android:background="@drawable/round_background_main_round20"
+                        android:scaleType="center"
                         android:src="@drawable/ic_baseline_sync_24" />
 
                 </RelativeLayout>
@@ -108,7 +112,7 @@
                                     android:gravity="center"
                                     android:text="서울"
                                     android:textColor="@color/main"
-                                    android:textSize="35sp" />
+                                    android:textSize="30dp" />
 
                                 <View
                                     android:id="@+id/v_dep"
@@ -136,7 +140,7 @@
                                 android:gravity="center"
                                 android:text="대전"
                                 android:textColor="@color/main"
-                                android:textSize="35sp" />
+                                android:textSize="30dp" />
 
                             <View
                                 android:id="@+id/v_arr"
@@ -177,7 +181,7 @@
                     android:padding="3dp"
                     android:text="KTX역 선택 지도"
                     android:textColor="@color/gray4"
-                    android:textSize="21sp" />
+                    android:textSize="18dp" />
 
                 <View
                     android:id="@+id/v_date"
@@ -200,7 +204,7 @@
                         android:gravity="center_horizontal"
                         android:text="출발일"
                         android:textColor="@color/main3"
-                        android:textSize="18sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/tv_date"
@@ -209,7 +213,7 @@
                         android:layout_weight="2.5"
                         android:gravity="center"
                         android:text="Date"
-                        android:textSize="28sp" />
+                        android:textSize="22dp" />
 
                     <ImageView
                         android:id="@+id/iv_dateexpand"
@@ -240,7 +244,7 @@
                         android:padding="3dp"
                         android:text="달력에서 날짜 선택"
                         android:textColor="@color/gray4"
-                        android:textSize="21sp" />
+                        android:textSize="18dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_date"
@@ -279,7 +283,7 @@
                         android:layout_marginTop="5dp"
                         android:text="승객 연령 및 좌석 수"
                         android:textColor="@color/main3"
-                        android:textSize="18sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/tv_qty"
@@ -288,7 +292,7 @@
                         android:layout_weight="2.5"
                         android:gravity="center"
                         android:text="총 1명"
-                        android:textSize="28sp" />
+                        android:textSize="22dp" />
 
                     <ImageView
                         android:id="@+id/iv_qtyexpand"
@@ -314,7 +318,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="0.8"
                         android:text="최소 1명 - 최대 9명"
-                        android:textSize="18sp"
+                        android:textSize="15dp"
                         android:textColor="@color/gray2"
                         android:layout_marginTop="10dp"
                         android:gravity="center"/>
@@ -330,7 +334,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:textSize="22sp"
+                            android:textSize="18dp"
                             android:gravity="center_vertical"
                             android:text="어른(만 13세 이상)"/>
 
@@ -351,7 +355,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="1"
-                            android:textSize="22sp"/>
+                            android:textSize="18dp"/>
 
                         <ImageButton
                             android:id="@+id/ib_qty1pls"
@@ -376,7 +380,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:textSize="22sp"
+                            android:textSize="18dp"
                             android:gravity="center_vertical"
                             android:text="어린이(만 6-12세)"/>
 
@@ -397,7 +401,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="0"
-                            android:textSize="22sp"/>
+                            android:textSize="18dp"/>
 
                         <ImageButton
                             android:id="@+id/ib_qty2pls"
@@ -422,7 +426,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:textSize="22sp"
+                            android:textSize="18dp"
                             android:gravity="center_vertical"
                             android:text="유아(만 6세 미만)"/>
 
@@ -443,7 +447,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="0"
-                            android:textSize="22sp"/>
+                            android:textSize="18dp"/>
 
                         <ImageButton
                             android:id="@+id/ib_qty3pls"
@@ -468,7 +472,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:textSize="22sp"
+                            android:textSize="18dp"
                             android:gravity="center_vertical"
                             android:text="경로(만 65세 이상)"/>
 
@@ -489,7 +493,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="0"
-                            android:textSize="22sp"/>
+                            android:textSize="18dp"/>
 
                         <ImageButton
                             android:id="@+id/ib_qty4pls"
@@ -514,7 +518,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:textSize="22sp"
+                            android:textSize="18dp"
                             android:gravity="center_vertical"
                             android:text="중증 장애인"/>
 
@@ -535,7 +539,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="0"
-                            android:textSize="22sp"/>
+                            android:textSize="18dp"/>
 
                         <ImageButton
                             android:id="@+id/ib_qty5pls"
@@ -560,7 +564,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:textSize="22sp"
+                            android:textSize="18dp"
                             android:gravity="center_vertical"
                             android:text="경증 장애인"/>
 
@@ -581,7 +585,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="0"
-                            android:textSize="22sp"/>
+                            android:textSize="18dp"/>
 
                         <ImageButton
                             android:id="@+id/ib_qty6pls"
@@ -616,7 +620,7 @@
                         android:layout_marginTop="5dp"
                         android:text="상세 옵션"
                         android:textColor="@color/main3"
-                        android:textSize="18sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/tv_option"
@@ -625,7 +629,7 @@
                         android:layout_weight="2.5"
                         android:gravity="center"
                         android:text="인접역 표출, SR 연계 표출"
-                        android:textSize="28sp" />
+                        android:textSize="22dp" />
 
                     <ImageView
                         android:id="@+id/iv_optionexpand"
@@ -697,7 +701,7 @@
                         android:imeOptions="actionDone"
                         android:maxLength="10"
                         android:singleLine="true"
-                        android:textSize="18sp" />
+                        android:textSize="15dp" />
 
                     <ImageView
                         android:id="@+id/iv_nodeclear"
@@ -751,7 +755,7 @@
                             android:layout_centerInParent="true"
                             android:text="가"
                             android:textColor="@color/white"
-                            android:textSize="120sp" />
+                            android:textSize="90dp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

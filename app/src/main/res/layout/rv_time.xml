@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00"
-            android:textSize="22sp" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tv_hour"
@@ -25,7 +25,7 @@
             android:text="시"
             android:layout_alignBaseline="@id/tv_time"
             android:layout_toEndOf="@id/tv_time"
-            android:textSize="11sp" />
+            android:textSize="11dp" />
 
 
     </RelativeLayout>

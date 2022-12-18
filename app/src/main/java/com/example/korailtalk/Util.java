@@ -35,6 +35,10 @@ public class Util {
         return Integer.parseInt(sdf.format(time));
     }
 
+    public static int roundCharge(double number) {
+        return (int) Math.round(number / 100.0) * 100;
+    }
+
     public static Timestamp getCurrentTime() {
         return new Timestamp(System.currentTimeMillis());
     }

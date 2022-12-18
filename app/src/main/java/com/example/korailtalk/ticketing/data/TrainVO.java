@@ -1,12 +1,12 @@
-package com.example.korailtalk.node;
+package com.example.korailtalk.ticketing.data;
 
-public class Train {
+public class TrainVO {
 
     private String depplacename, arrplacename, traingradename;
     private int adultcharge, trainno;
     private double depplandtime, arrplandtime;
 
-    public Train(String depplacename, String arrplacename, String traingradename, int adultcharge, int trainno, double depplandtime, double arrplandtime) {
+    public TrainVO(String depplacename, String arrplacename, String traingradename, int adultcharge, int trainno, double depplandtime, double arrplandtime) {
         this.depplacename = depplacename;
         this.arrplacename = arrplacename;
         this.traingradename = traingradename;

@@ -1,8 +1,7 @@
 package com.example.korailtalk.ticketing;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -37,6 +35,7 @@ public class LookupActivity extends BaseActivity {
     private String depNode;
     private String arrNode;
     private TrainRvVO selectedTrain;
+    private int[] qtyArr;
     private boolean specialSeat;
 
     @Override
@@ -44,13 +43,16 @@ public class LookupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         activity = this;
         context = getApplicationContext();
+        b.toolbar.ivBack.setOnClickListener((v -> finish()));
+
         Intent intent = getIntent();
         depNode = intent.getStringExtra("depNode");
         arrNode = intent.getStringExtra("arrNode");
+        qtyArr = intent.getIntArrayExtra("qtyArr");
         tsDate = (Timestamp) intent.getSerializableExtra("date");
         nodeRoom = new NodeRoom(this, getTrainHandler());
 
-        // api로부터 최근 일자 가격이 잘 안나오는 문제때문에 1년전 데이터를 불러옴
+        // api로부터 최근 일자 가격이 잘 안나오는 문제 때문에 1년전 데이터를 불러옴
         tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, -1);
         nodeRoom.getTrainFromApi(depNode, arrNode, tsDate);
         tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, 1);
@@ -62,10 +64,15 @@ public class LookupActivity extends BaseActivity {
         // 이전날, 다음날 조회
 
         // Spinner
-        b.spGrade.setAdapter(ArrayAdapter.createFromResource(context, R.array.grade, android.R.layout.simple_spinner_dropdown_item));
-        b.spSeat.setAdapter(ArrayAdapter.createFromResource(context, R.array.seat, android.R.layout.simple_spinner_dropdown_item));
-        b.spTrans.setAdapter(ArrayAdapter.createFromResource(context, R.array.trans, android.R.layout.simple_spinner_dropdown_item));
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.grade, android.R.layout.simple_spinner_dropdown_item);
+        b.spGrade.setAdapter(adapter);
+        adapter = ArrayAdapter.createFromResource(context, R.array.seat, android.R.layout.simple_spinner_dropdown_item);
+        b.spSeat.setAdapter(adapter);
+        adapter = ArrayAdapter.createFromResource(context, R.array.trans, android.R.layout.simple_spinner_dropdown_item);
+        b.spTrans.setAdapter(adapter);
 
+        // 결제
+        b.tvSelect.setOnClickListener(onSelect());
     }
 
     @Override
@@ -78,6 +85,8 @@ public class LookupActivity extends BaseActivity {
         b = ActivityLookupBinding.inflate(getLayoutInflater());
         return b.getRoot();
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     private Handler getTrainHandler() {
         return new Handler(Looper.getMainLooper()) {
@@ -104,6 +113,26 @@ public class LookupActivity extends BaseActivity {
         selectedTrain = train;
         specialSeat = special;
         b.tvSelect.setVisibility(View.VISIBLE);
+        if (selectedTrain.getAdultcharge().equals("매진")) {
+            b.tvSelect.setBackgroundColor(ContextCompat.getColor(activity, R.color.aliceblue));
+            b.tvSelect.setTextColor(ContextCompat.getColor(context, R.color.main6));
+        } else {
+            b.tvSelect.setBackgroundColor(ContextCompat.getColor(activity, R.color.main6));
+            b.tvSelect.setTextColor(ContextCompat.getColor(context, R.color.main));
+        }
+    }
+
+    private View.OnClickListener onSelect() {
+        return view -> {
+            if (!selectedTrain.getAdultcharge().equals("매진")) {
+                Intent intent = new Intent(activity, CheckActivity.class);
+                intent.putExtra("train", selectedTrain);
+                intent.putExtra("special", specialSeat);
+                intent.putExtra("tsDate", tsDate);
+                intent.putExtra("qtyArr", qtyArr);
+                startActivity(intent);
+            }
+        };
     }
 
 }

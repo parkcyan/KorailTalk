@@ -14,7 +14,7 @@
         android:background="@color/whitesmoke"
         android:gravity="center_vertical"
         android:paddingStart="15dp"
-        android:textSize="19sp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_node2"
@@ -26,6 +26,6 @@
         android:background="@color/whitesmoke"
         android:gravity="center_vertical"
         android:paddingStart="15dp"
-        android:textSize="19sp" />
+        android:textSize="16dp" />
 
 </LinearLayout>
