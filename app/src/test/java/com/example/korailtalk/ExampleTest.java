@@ -1,7 +1,5 @@
 package com.example.korailtalk;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,8 +11,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 
-public class ApiUnitTest {
+public class ExampleTest {
 
     private final String SERVICE_KEY = "bV8Qa13gBAIQTlWOVkdceGorgqXDUFoPycZ71CS/Ez5b7w/kN1w89tV2zMBWwU4FZfaCqjC15LXqszMNwumAzw==";
     private final String ENCODE = "UTF-8";
@@ -68,4 +67,5 @@ public class ApiUnitTest {
         conn.disconnect();
         return new JSONObject(sb.toString());
     }
+
 }

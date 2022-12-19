@@ -18,7 +18,7 @@ import com.example.korailtalk.Util;
 import com.example.korailtalk.databinding.ActivityLookupBinding;
 import com.example.korailtalk.node.NodeRoom;
 import com.example.korailtalk.ticketing.adapter.TrainAdapter;
-import com.example.korailtalk.ticketing.data.TrainRvVO;
+import com.example.korailtalk.ticketing.data.TrainVO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -31,10 +31,10 @@ public class LookupActivity extends BaseActivity {
     private Context context;
     private Timestamp tsDate;
     private NodeRoom nodeRoom;
-    private ArrayList<TrainRvVO> trainList;
+    private ArrayList<TrainVO> trainList;
     private String depNode;
     private String arrNode;
-    private TrainRvVO selectedTrain;
+    private TrainVO selectedTrain;
     private int[] qtyArr;
     private boolean specialSeat;
 
@@ -52,10 +52,10 @@ public class LookupActivity extends BaseActivity {
         tsDate = (Timestamp) intent.getSerializableExtra("date");
         nodeRoom = new NodeRoom(this, getTrainHandler());
 
-        // api로부터 최근 일자 가격이 잘 안나오는 문제 때문에 1년전 데이터를 불러옴
-        tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, -1);
+        // api로부터 1월달 열차 가격이 잘 안나오는 문제 때문에 1개월전 데이터를 불러옴
+        tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, -1);
         nodeRoom.getTrainFromApi(depNode, arrNode, tsDate);
-        tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, 1);
+        tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, 1);
 
         b.tvDep.setText(intent.getStringExtra("depNode"));
         b.tvArr.setText(intent.getStringExtra("arrNode"));
@@ -93,7 +93,7 @@ public class LookupActivity extends BaseActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == NodeRoom.GET_TRAIN_SUCCESS) {
-                    trainList = (ArrayList<TrainRvVO>) msg.obj;
+                    trainList = (ArrayList<TrainVO>) msg.obj;
                     if (trainList.isEmpty()) {
                         b.rlProgress.setVisibility(View.GONE);
                         b.clNottrain.setVisibility(View.VISIBLE);
@@ -109,7 +109,7 @@ public class LookupActivity extends BaseActivity {
         };
     }
 
-    public void trainSelect(TrainRvVO train, boolean special) {
+    public void trainSelect(TrainVO train, boolean special) {
         selectedTrain = train;
         specialSeat = special;
         b.tvSelect.setVisibility(View.VISIBLE);

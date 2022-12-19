@@ -5,23 +5,35 @@ import android.view.View;
 
 import com.example.korailtalk.databinding.ActivityMainBinding;
 import com.example.korailtalk.ticketing.TicketingFragment;
+import com.example.korailtalk.ticketing.data.NodeVO;
+
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
 
     ActivityMainBinding b;
+    TicketingFragment ticketingFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setBnv();
         b.toolbar.ivBack.setVisibility(View.INVISIBLE);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("nodeList", (ArrayList<NodeVO>) getIntent().getSerializableExtra("nodeList"));
+
+        ticketingFragment = new TicketingFragment();
+        ticketingFragment.setArguments(bundle);
+
+        setBnv();
     }
 
     private void setBnv() {
-        setFragment(R.id.container_main, new TicketingFragment());
+        addFragment(R.id.container_main, ticketingFragment);
         b.bnvMain.bnvMain.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bnv_main_tic) {
-                setFragment(R.id.container_main, new TicketingFragment());
+                if (ticketingFragment != null) {
+                    showFragment(ticketingFragment);
+                }
             } else if (item.getItemId() == R.id.bnv_main_seasontic) {
 
             } else if (item.getItemId() == R.id.bnv_main_goods) {

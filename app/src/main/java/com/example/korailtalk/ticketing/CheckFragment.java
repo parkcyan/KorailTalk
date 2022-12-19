@@ -9,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.korailtalk.R;
 import com.example.korailtalk.Util;
 import com.example.korailtalk.databinding.FragmentCheckBinding;
-import com.example.korailtalk.ticketing.data.TrainRvVO;
+import com.example.korailtalk.ticketing.data.TrainVO;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -21,19 +20,17 @@ import java.util.Random;
 public class CheckFragment extends Fragment {
 
     FragmentCheckBinding b;
-    Intent intent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         b = FragmentCheckBinding.inflate(inflater, container, false);
-        intent = ((PaymentActivity) getActivity()).getPaymentIntent();
+        Bundle bundle = getArguments();
 
-        TrainRvVO train = (TrainRvVO) intent.getSerializableExtra("train");
-        boolean specialSeat = intent.getBooleanExtra("special", false);
-        Timestamp tsDate = (Timestamp) intent.getSerializableExtra("tsDate");
-        int[] qtyArr = intent.getIntArrayExtra("qtyArr");
-
+        TrainVO train = (TrainVO) bundle.getSerializable("train");
+        boolean specialSeat = bundle.getBoolean("special");
+        Timestamp tsDate = (Timestamp) bundle.getSerializable("tsDate");
+        int[] qtyArr = bundle.getIntArray("qtyArr");
 
         b.tvDate.setText(Util.dateFormat(tsDate, "yyyy년 M월 d일 (E)"));
         String trainGradeNo = train.getTraingradename() + " " + train.getTrainno();
@@ -56,7 +53,7 @@ public class CheckFragment extends Fragment {
 
         int charge = specialSeat ? Util.roundCharge(train.getCharge() * 1.4) : train.getCharge();
         int totalCharge = charge * qty;
-        int discountCharge = ((PaymentActivity) getActivity()).getDiscountCharge();
+        int discountCharge = bundle.getInt("discountCharge");
         b.tvCharge.setText(df.format(discountCharge));
 
         String discountStr = df.format(totalCharge) + " (총 " + df.format(totalCharge - discountCharge) + " 할인)";

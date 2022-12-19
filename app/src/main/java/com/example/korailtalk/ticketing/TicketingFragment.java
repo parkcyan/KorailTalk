@@ -74,6 +74,8 @@ public class TicketingFragment extends Fragment {
         b = FragmentTicketingBinding.inflate(inflater, container, false);
         context = getContext();
         fragment = this;
+        Bundle bundle = getArguments();
+        ArrayList<NodeVO> nodeList = (ArrayList<NodeVO>) bundle.getSerializable("nodeList");
 
         nodeRoom = new NodeRoom(context, getNodeHandler());
 
@@ -85,7 +87,7 @@ public class TicketingFragment extends Fragment {
         // 역 선택창
         b.llNodefold.setOnClickListener(view -> nodeFold());
 
-        adapter = new NodeAdapter(fragment, nodeRoom.getNodeListForRv());
+        adapter = new NodeAdapter(fragment, nodeList);
         b.rvNode.setItemViewCacheSize(30);
         Util.setRecyclerView(context, b.rvNode, adapter, true);
 
@@ -97,9 +99,8 @@ public class TicketingFragment extends Fragment {
         });
 
         int position = 0;
-        for (int i = 0; i < nodeRoom.getNodeListForRv().size(); i++) {
-            if (nodeRoom.getNodeListForRv().get(i).getViewType() == 1) {
-                Log.d(TAG, "onCreateView: " + i);
+        for (int i = 0; i < nodeList.size(); i++) {
+            if (nodeList.get(i).getViewType() == 1) {
                 sflPosition[position++] = i;
             }
         }
@@ -369,7 +370,7 @@ public class TicketingFragment extends Fragment {
             if (view.getId() == R.id.ll_date) {
                 if (b.llDateContent.getVisibility() == View.GONE) {
                     b.llDateContent.setVisibility(View.VISIBLE);
-                    b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.skyblue2));
+                    b.llDate.setBackgroundColor(ContextCompat.getColor(context, R.color.main7));
                     b.ivDateexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
                     b.llDateContent.post(() -> b.svTic.smoothScrollTo(0, Util.getScrollPosition(b.svTic, b.llDate)));
                 } else {
@@ -380,7 +381,7 @@ public class TicketingFragment extends Fragment {
             } else if (view.getId() == R.id.ll_qty) {
                 if (b.llQtyContent.getVisibility() == View.GONE) {
                     b.llQtyContent.setVisibility(View.VISIBLE);
-                    b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.skyblue2));
+                    b.llQty.setBackgroundColor(ContextCompat.getColor(context, R.color.main7));
                     b.ivQtyexpand.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24_main);
                     b.llQtyContent.post(() -> b.svTic.smoothScrollTo(0, Util.getScrollPosition(b.svTic, b.llQty)));
                 } else {

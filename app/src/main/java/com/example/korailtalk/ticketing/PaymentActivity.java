@@ -8,8 +8,9 @@ import com.example.korailtalk.BaseActivity;
 import com.example.korailtalk.R;
 import com.example.korailtalk.Util;
 import com.example.korailtalk.databinding.ActivityPaymentBinding;
-import com.example.korailtalk.ticketing.data.TrainRvVO;
+import com.example.korailtalk.ticketing.data.TrainVO;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 
 public class PaymentActivity extends BaseActivity {
@@ -17,8 +18,8 @@ public class PaymentActivity extends BaseActivity {
     private ActivityPaymentBinding b;
     private int[] qtyArr;
     private boolean specialSeat;
-    private TrainRvVO train;
-    private Intent intent;
+    private TrainVO train;
+    private Timestamp tsDate;
     private CheckFragment checkFragment;
     private PaymentFragment paymentFragment;
     private boolean isOnCheck = true;
@@ -26,17 +27,22 @@ public class PaymentActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        b.toolbar.ivBack.setOnClickListener((v -> finish()));
-        intent = getIntent();
+        Intent intent = getIntent();
         checkFragment = new CheckFragment();
         paymentFragment = new PaymentFragment();
-        addFragment(R.id.container_payment, checkFragment);
-        addFragment(R.id.container_payment, paymentFragment);
-        hideFragment(paymentFragment);
+        b.toolbar.ivBack.setOnClickListener((v -> finish()));
 
         qtyArr = intent.getIntArrayExtra("qtyArr");
         specialSeat = intent.getBooleanExtra("special", false);
-        train = (TrainRvVO) intent.getSerializableExtra("train");
+        train = (TrainVO) intent.getSerializableExtra("train");
+        tsDate = (Timestamp) intent.getSerializableExtra("tsDate");
+
+        Bundle bundle = setBundle();
+        checkFragment.setArguments(bundle);
+        paymentFragment.setArguments(bundle);
+        addFragment(R.id.container_payment, checkFragment);
+        addFragment(R.id.container_payment, paymentFragment);
+        hideFragment(paymentFragment);
 
         DecimalFormat df = new DecimalFormat("###,###원");
 
@@ -56,8 +62,14 @@ public class PaymentActivity extends BaseActivity {
         return b.getRoot();
     }
 
-    public Intent getPaymentIntent() {
-        return intent;
+    private Bundle setBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putIntArray("qtyArr" , qtyArr);
+        bundle.putBoolean("special", specialSeat);
+        bundle.putSerializable("train", train);
+        bundle.putSerializable("tsDate", tsDate);
+        bundle.putInt("discountCharge", getDiscountCharge());
+        return bundle;
     }
 
     @Override
@@ -77,16 +89,15 @@ public class PaymentActivity extends BaseActivity {
     }
 
     public View.OnClickListener onNext() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        return v -> {
+            if (isOnCheck) {
                 hideFragment(checkFragment);
                 showFragment(paymentFragment);
                 isOnCheck = false;
                 b.tvCancel.setText("이전");
                 b.tvNext.setText("결제/발권");
                 b.tvCancel.setOnClickListener(view -> backToCheckFragment());
-            }
+            } else paymentFragment.payment();
         };
     }
 
@@ -97,6 +108,11 @@ public class PaymentActivity extends BaseActivity {
         b.tvNext.setText("다음");
         isOnCheck = true;
         b.tvCancel.setOnClickListener(v -> finish());
+    }
+
+    public void setBottomVisibility(boolean visibility) {
+        if (visibility) b.llBottom.setVisibility(View.VISIBLE);
+        else b.llBottom.setVisibility(View.GONE);
     }
 
 }

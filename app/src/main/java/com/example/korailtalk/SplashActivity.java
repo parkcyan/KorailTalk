@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.korailtalk.node.NodeRoom;
+import com.example.korailtalk.ticketing.data.NodeVO;
+
+import java.util.ArrayList;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -25,7 +28,9 @@ public class SplashActivity extends AppCompatActivity {
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == NodeRoom.GET_NODE_SUCCESS) nodeRoom.getNodeForRv();
                 else if (msg.what == NodeRoom.GET_LIST_FOR_RV) {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    intent.putExtra("nodeList", (ArrayList<NodeVO>) msg.obj);
+                    startActivity(intent);
                     finish();
                 }
             }

@@ -9,8 +9,8 @@ import android.util.Log;
 import com.example.korailtalk.Util;
 import com.example.korailtalk.api.ApiExplorer;
 import com.example.korailtalk.ticketing.data.NodeVO;
+import com.example.korailtalk.ticketing.data.Train;
 import com.example.korailtalk.ticketing.data.TrainVO;
-import com.example.korailtalk.ticketing.data.TrainRvVO;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -29,7 +29,7 @@ public class NodeRoom {
 
     public static final int GET_TRAIN_SUCCESS = 1;
     public static final int GET_TRAIN_FAILED = -1;
-    private final ArrayList<NodeVO> nodeListForRv = new ArrayList<>();
+    private final ArrayList<NodeVO> nodeList = new ArrayList<>();
     private final NodeDAO nodeDAO;
     private final NodeDB nodeDB;
     private final int[] citycode = {11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 37, 38};
@@ -96,29 +96,29 @@ public class NodeRoom {
                 index += nodeDAO.getNodeCountBetween(searchStr[i], searchStr[i + 1]);
                 indexList.add(index);
             }
-            nodeListForRv.add(new NodeVO(fl[0], null, 1));
-            nodeListForRv.add(new NodeVO(fl[1], null, 1));
-            nodeListForRv.add(new NodeVO(fl[2], null, 1));
+            nodeList.add(new NodeVO(fl[0], null, 1));
+            nodeList.add(new NodeVO(fl[1], null, 1));
+            nodeList.add(new NodeVO(fl[2], null, 1));
             for (int i = 0; i < mainNodeList.size(); i += 2) {
                 if (i + 1 != mainNodeList.size()) {
-                    nodeListForRv.add(new NodeVO(mainNodeList.get(i).nodename, mainNodeList.get(i + 1).nodename, 0));
+                    nodeList.add(new NodeVO(mainNodeList.get(i).nodename, mainNodeList.get(i + 1).nodename, 0));
                 } else {
-                    nodeListForRv.add(new NodeVO(mainNodeList.get(i).nodename, "", 0));
+                    nodeList.add(new NodeVO(mainNodeList.get(i).nodename, "", 0));
                 }
             }
             int flIndex = 3;
             for (int i = 0; i < allNodeList.size(); ) {
                 if (indexList.contains(i)) {
-                    nodeListForRv.add(new NodeVO(fl[flIndex++], null, 1));
+                    nodeList.add(new NodeVO(fl[flIndex++], null, 1));
                 }
                 if (!indexList.contains(i + 1)) {
-                    nodeListForRv.add(new NodeVO(allNodeList.get(i++).nodename, allNodeList.get(i++).nodename, 0));
+                    nodeList.add(new NodeVO(allNodeList.get(i++).nodename, allNodeList.get(i++).nodename, 0));
                 } else {
-                    nodeListForRv.add(new NodeVO(allNodeList.get(i++).nodename, "", 0));
+                    nodeList.add(new NodeVO(allNodeList.get(i++).nodename, "", 0));
                 }
             }
             Log.d(TAG, "nodeRoom: GET_LIST_FOR_RV");
-            handler.sendMessage(handler.obtainMessage(GET_LIST_FOR_RV, nodeListForRv));
+            handler.sendMessage(handler.obtainMessage(GET_LIST_FOR_RV, nodeList));
         }).start();
     }
 
@@ -146,11 +146,11 @@ public class NodeRoom {
             nodeidArr[1] = nodeDAO.getNodeid(arrNode);
             try {
                 JSONArray trainArr = apiExplorer.getTrain(nodeidArr[0], nodeidArr[1], Util.dateFormatInt(tsDate, "yyyyMMdd"), 1);
-                ArrayList<TrainRvVO> trainList = new ArrayList<>();
+                ArrayList<TrainVO> trainList = new ArrayList<>();
                 for (int i = 0; i < trainArr.length(); i++) {
-                    TrainVO trainVO = new Gson().fromJson(trainArr.getJSONObject(i).toString(), TrainVO.class);
-                    if (Util.getTimestmpFromDouble(trainVO.getDepplandtime()).getTime() > tsDate.getTime()) {
-                        trainList.add(new TrainRvVO(trainVO));
+                    Train train = new Gson().fromJson(trainArr.getJSONObject(i).toString(), Train.class);
+                    if (Util.getTimestmpFromDouble(train.getDepplandtime()).getTime() > tsDate.getTime()) {
+                        trainList.add(new TrainVO(train));
                     }
                 }
                 handler.sendMessage(handler.obtainMessage(GET_TRAIN_SUCCESS, trainList));
@@ -161,10 +161,6 @@ public class NodeRoom {
                 handler.sendMessage(handler.obtainMessage(GET_TRAIN_FAILED, null));
             }
         }).start();
-    }
-
-    public ArrayList<NodeVO> getNodeListForRv() {
-        return nodeListForRv;
     }
 
     private boolean hasTable() {

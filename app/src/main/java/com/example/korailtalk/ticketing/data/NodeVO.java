@@ -1,6 +1,8 @@
 package com.example.korailtalk.ticketing.data;
 
-public class NodeVO {
+import java.io.Serializable;
+
+public class NodeVO implements Serializable {
 
     private String node1, node2;
     private int viewType;

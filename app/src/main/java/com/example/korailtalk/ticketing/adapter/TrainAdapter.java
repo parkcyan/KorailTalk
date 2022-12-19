@@ -1,9 +1,5 @@
 package com.example.korailtalk.ticketing.adapter;
 
-import static android.content.ContentValues.TAG;
-
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.RvTrainBinding;
 import com.example.korailtalk.ticketing.LookupActivity;
-import com.example.korailtalk.ticketing.data.TrainRvVO;
+import com.example.korailtalk.ticketing.data.TrainVO;
 
 import java.util.ArrayList;
 
 public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.TrainViewHolder> {
 
     private LookupActivity activity;
-    private ArrayList<TrainRvVO> trainList;
+    private ArrayList<TrainVO> trainList;
     private LayoutInflater inflater;
     private int selectedPosition = -1;
 
-    public TrainAdapter(LookupActivity activity, ArrayList<TrainRvVO> trainList) {
+    public TrainAdapter(LookupActivity activity, ArrayList<TrainVO> trainList) {
         this.activity = activity;
         this.trainList = trainList;
         inflater = activity.getLayoutInflater();
@@ -40,7 +36,7 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.TrainViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TrainViewHolder holder, int position) {
-        TrainRvVO train = trainList.get(position);
+        TrainVO train = trainList.get(position);
         holder.b.tvTrain.setText(train.getTraingradename());
         holder.b.tvTrainno.setText(train.getTrainno());
         holder.b.tvDep.setText(train.getDepplacename());

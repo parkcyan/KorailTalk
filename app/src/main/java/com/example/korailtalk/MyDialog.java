@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.korailtalk.databinding.DialogMainBinding;
 
 public class MyDialog {
@@ -12,8 +14,10 @@ public class MyDialog {
     DialogMainBinding b;
     Dialog dialog;
     String title, content;
+    Context context;
 
     public MyDialog(Context context, LayoutInflater inflater, String title, String content) {
+        this.context = context;
         dialog = new Dialog(context);
         b = DialogMainBinding.inflate(inflater);
         dialog.setContentView(b.getRoot());
@@ -29,6 +33,12 @@ public class MyDialog {
         b.tvTitle.setText(title);
         b.tvContent.setText(content);
         b.tvConfirm.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    public MyDialog setPurple() {
+        b.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.purple));
+        b.tvConfirm.setBackgroundColor(ContextCompat.getColor(context, R.color.purple3));
+        return this;
     }
 
     public void show() {

@@ -14,4 +14,12 @@
         <item name="android:textColor">@color/main3</item>
     </style>
 
+    <style name="etstyle_payform" parent="Widget.AppCompat.EditText">
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/font</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/purple2</item>
+        <item name="android:background">@drawable/rectangle_white</item>
+    </style>
+
 </resources>
