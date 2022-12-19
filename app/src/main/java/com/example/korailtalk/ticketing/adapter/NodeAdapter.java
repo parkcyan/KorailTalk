@@ -21,12 +21,6 @@ public class NodeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final TicketingFragment fragment;
     private final ArrayList<NodeVO> nodeList;
 
-    public NodeAdapter(TicketingFragment fragment) {
-        this.fragment = fragment;
-        inflater = fragment.getLayoutInflater();
-        nodeList = NodeRoom.nodeListForRv;
-    }
-
     public NodeAdapter(TicketingFragment fragment, ArrayList<NodeVO> nodeList) {
         this.fragment = fragment;
         inflater = fragment.getLayoutInflater();

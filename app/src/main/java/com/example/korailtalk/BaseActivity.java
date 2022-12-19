@@ -9,9 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.example.korailtalk.ticketing.TicketingFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 public abstract class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -25,11 +22,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setToolbar();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     private void setToolbar() {
         toolbar = findViewById(R.id.toolbar);
         tv_toolbar = findViewById(R.id.tv_toolbar);
@@ -40,8 +32,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
     }
 
-    protected void newFragment(int id, Fragment fragment) {
+    protected void setFragment(int id, Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(id, fragment).commit();
+    }
+
+    protected void addFragment(int id, Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(id, fragment).commit();
+    }
+
+    protected void showFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().show(fragment).commit();
+    }
+
+    protected void hideFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().hide(fragment).commit();
     }
 
     protected abstract String setToolbarTitle();

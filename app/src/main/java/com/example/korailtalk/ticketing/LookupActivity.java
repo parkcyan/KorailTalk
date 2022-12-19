@@ -125,7 +125,7 @@ public class LookupActivity extends BaseActivity {
     private View.OnClickListener onSelect() {
         return view -> {
             if (!selectedTrain.getAdultcharge().equals("매진")) {
-                Intent intent = new Intent(activity, CheckActivity.class);
+                Intent intent = new Intent(activity, PaymentActivity.class);
                 intent.putExtra("train", selectedTrain);
                 intent.putExtra("special", specialSeat);
                 intent.putExtra("tsDate", tsDate);

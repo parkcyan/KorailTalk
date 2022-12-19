@@ -1,16 +1,10 @@
 package com.example.korailtalk;
 
-import androidx.annotation.NonNull;
-
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.example.korailtalk.databinding.ActivityMainBinding;
 import com.example.korailtalk.ticketing.TicketingFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends BaseActivity {
 
@@ -24,10 +18,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setBnv() {
-        newFragment(R.id.container_main, new TicketingFragment());
+        setFragment(R.id.container_main, new TicketingFragment());
         b.bnvMain.bnvMain.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bnv_main_tic) {
-                newFragment(R.id.container_main, new TicketingFragment());
+                setFragment(R.id.container_main, new TicketingFragment());
             } else if (item.getItemId() == R.id.bnv_main_seasontic) {
 
             } else if (item.getItemId() == R.id.bnv_main_goods) {

@@ -1,5 +1,7 @@
 package com.example.korailtalk.ticketing;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -82,7 +85,7 @@ public class TicketingFragment extends Fragment {
         // 역 선택창
         b.llNodefold.setOnClickListener(view -> nodeFold());
 
-        adapter = new NodeAdapter(fragment);
+        adapter = new NodeAdapter(fragment, nodeRoom.getNodeListForRv());
         b.rvNode.setItemViewCacheSize(30);
         Util.setRecyclerView(context, b.rvNode, adapter, true);
 
@@ -94,8 +97,9 @@ public class TicketingFragment extends Fragment {
         });
 
         int position = 0;
-        for (int i = 0; i < NodeRoom.nodeListForRv.size(); i++) {
-            if (NodeRoom.nodeListForRv.get(i).getViewType() == 1) {
+        for (int i = 0; i < nodeRoom.getNodeListForRv().size(); i++) {
+            if (nodeRoom.getNodeListForRv().get(i).getViewType() == 1) {
+                Log.d(TAG, "onCreateView: " + i);
                 sflPosition[position++] = i;
             }
         }

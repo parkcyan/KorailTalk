@@ -29,7 +29,7 @@ public class NodeRoom {
 
     public static final int GET_TRAIN_SUCCESS = 1;
     public static final int GET_TRAIN_FAILED = -1;
-    public static final ArrayList<NodeVO> nodeListForRv = new ArrayList<>();
+    private final ArrayList<NodeVO> nodeListForRv = new ArrayList<>();
     private final NodeDAO nodeDAO;
     private final NodeDB nodeDB;
     private final int[] citycode = {11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 37, 38};
@@ -161,6 +161,10 @@ public class NodeRoom {
                 handler.sendMessage(handler.obtainMessage(GET_TRAIN_FAILED, null));
             }
         }).start();
+    }
+
+    public ArrayList<NodeVO> getNodeListForRv() {
+        return nodeListForRv;
     }
 
     private boolean hasTable() {
