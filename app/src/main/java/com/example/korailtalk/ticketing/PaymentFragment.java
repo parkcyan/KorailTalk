@@ -140,6 +140,7 @@ public class PaymentFragment extends Fragment {
             paymentError("개인정보 수집 및 이용동의에 동의하시기\n바랍니다.");
             return;
         }
+        
 
     }
     // 개인정보 수집 및 이용동의에 동의하시기 // 바랍니다.
