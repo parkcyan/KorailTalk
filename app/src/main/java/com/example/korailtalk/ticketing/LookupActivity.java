@@ -12,11 +12,11 @@ import android.os.Message;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-import com.example.korailtalk.BaseActivity;
+import com.example.korailtalk.util.BaseActivity;
 import com.example.korailtalk.R;
-import com.example.korailtalk.Util;
+import com.example.korailtalk.util.Util;
 import com.example.korailtalk.databinding.ActivityLookupBinding;
-import com.example.korailtalk.node.NodeRoom;
+import com.example.korailtalk.room.node.NodeRoom;
 import com.example.korailtalk.ticketing.adapter.TrainAdapter;
 import com.example.korailtalk.ticketing.data.TrainVO;
 

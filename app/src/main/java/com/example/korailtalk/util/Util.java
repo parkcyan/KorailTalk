@@ -1,4 +1,4 @@
-package com.example.korailtalk;
+package com.example.korailtalk.util;
 
 import android.content.Context;
 import android.view.View;

@@ -1,6 +1,5 @@
 package com.example.korailtalk.ticketing;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.korailtalk.Util;
+import com.example.korailtalk.util.Util;
 import com.example.korailtalk.databinding.FragmentCheckBinding;
 import com.example.korailtalk.ticketing.data.TrainVO;
 

@@ -2,7 +2,6 @@ package com.example.korailtalk.ticketing;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,12 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.korailtalk.MyDialog;
-import com.example.korailtalk.Util;
+import com.example.korailtalk.util.MyDialog;
+import com.example.korailtalk.util.Util;
 import com.example.korailtalk.databinding.FragmentPaymentBinding;
 import com.example.korailtalk.ticketing.data.TrainVO;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 

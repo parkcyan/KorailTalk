@@ -1,4 +1,4 @@
-package com.example.korailtalk.ticket;
+package com.example.korailtalk.room.ticket;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

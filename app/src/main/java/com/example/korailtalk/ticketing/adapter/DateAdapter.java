@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.korailtalk.R;
-import com.example.korailtalk.Util;
+import com.example.korailtalk.util.Util;
 import com.example.korailtalk.databinding.RvDateBinding;
 import com.example.korailtalk.ticketing.TicketingFragment;
 

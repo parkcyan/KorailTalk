@@ -1,4 +1,4 @@
-package com.example.korailtalk.node;
+package com.example.korailtalk.room.node;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

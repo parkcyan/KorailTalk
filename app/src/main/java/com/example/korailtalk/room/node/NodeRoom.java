@@ -1,4 +1,4 @@
-package com.example.korailtalk.node;
+package com.example.korailtalk.room.node;
 
 import static android.content.ContentValues.TAG;
 
@@ -6,8 +6,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.korailtalk.Util;
-import com.example.korailtalk.api.ApiExplorer;
+import com.example.korailtalk.room.KtRoom;
+import com.example.korailtalk.util.Util;
+import com.example.korailtalk.util.ApiExplorer;
 import com.example.korailtalk.ticketing.data.NodeVO;
 import com.example.korailtalk.ticketing.data.Train;
 import com.example.korailtalk.ticketing.data.TrainVO;
@@ -24,14 +25,15 @@ import java.util.Arrays;
 public class NodeRoom {
 
     public static final int GET_NODE_SUCCESS = 1;
-    public static final int SEARCH_SUCCESS = 1;
     public static final int GET_LIST_FOR_RV = 2;
+
+    public static final int SEARCH_SUCCESS = 1;
 
     public static final int GET_TRAIN_SUCCESS = 1;
     public static final int GET_TRAIN_FAILED = -1;
     private final ArrayList<NodeVO> nodeList = new ArrayList<>();
     private final NodeDAO nodeDAO;
-    private final NodeDB nodeDB;
+    private final KtRoom ktRoom;
     private final int[] citycode = {11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 37, 38};
     private final String[] mainnode = {"서울", "용산", "광명", "영등포", "수원", "평택", "천안아산", "천안",
             "오송", "조치원", "대전", "서대전", "김천구미", "구미", "동대구", "대구", "울산(통도사)", "포항", "경산", "밀양",
@@ -44,17 +46,17 @@ public class NodeRoom {
     private final ApiExplorer apiExplorer = ApiExplorer.getInstance();
 
     public NodeRoom(Context context, Handler handler) {
-        nodeDB = NodeDB.getInstance(context);
-        nodeDAO = nodeDB.getNodeDAO();
+        ktRoom = KtRoom.getInstance(context);
+        nodeDAO = ktRoom.getNodeDAO();
         this.handler = handler;
     }
 
     public void checkNodeTable() {
         new Thread(() -> {
-            if (!hasTable() || !hasNode()) getNodeFromApi();
+            if (!hasTable() || !hasNode()) initNodeTable();
             else {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(250);
                     Log.d(TAG, "nodeRoom: GET_NODE_SUCCESS");
                     handler.sendMessage(handler.obtainMessage(GET_NODE_SUCCESS, 1));
                 } catch (InterruptedException e) {
@@ -65,7 +67,7 @@ public class NodeRoom {
         }).start();
     }
 
-    public void getNodeFromApi() {
+    private void initNodeTable() {
         new Thread(() -> {
             try {
                 if (hasTable()) nodeDAO.truncate();
@@ -74,7 +76,7 @@ public class NodeRoom {
                     for (int i = 0; i < nodeArr.length(); i++) {
                         Node node = new Gson().fromJson(nodeArr.getJSONObject(i).toString(), Node.class);
                         node.mainnode = Arrays.asList(mainnode).contains(node.nodename);
-                        nodeDB.getNodeDAO().insert(node);
+                        ktRoom.getNodeDAO().insert(node);
                     }
                 }
                 handler.sendMessage(handler.obtainMessage(GET_NODE_SUCCESS, 1));

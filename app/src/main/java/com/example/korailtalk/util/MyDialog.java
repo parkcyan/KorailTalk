@@ -1,4 +1,4 @@
-package com.example.korailtalk;
+package com.example.korailtalk.util;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.DialogMainBinding;
 
 public class MyDialog {
@@ -24,7 +25,7 @@ public class MyDialog {
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.horizontalMargin = 100;
-        dialog.getWindow().setAttributes(lp);;
+        dialog.getWindow().setAttributes(lp);
         dialog.getWindow().setDimAmount(0);
         dialog.setCancelable(false);
 

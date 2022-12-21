@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import com.example.korailtalk.checkTicket.CheckTicketFragment;
 import com.example.korailtalk.databinding.ActivityMainBinding;
 import com.example.korailtalk.ticketing.TicketingFragment;
+import com.example.korailtalk.util.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 

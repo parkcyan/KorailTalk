@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.korailtalk.R;
-import com.example.korailtalk.node.NodeRoom;
 import com.example.korailtalk.ticketing.data.NodeVO;
 import com.example.korailtalk.ticketing.TicketingFragment;
 

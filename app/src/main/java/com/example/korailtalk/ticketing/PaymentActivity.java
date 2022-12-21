@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.korailtalk.BaseActivity;
+import com.example.korailtalk.util.BaseActivity;
 import com.example.korailtalk.R;
-import com.example.korailtalk.Util;
+import com.example.korailtalk.util.Util;
 import com.example.korailtalk.databinding.ActivityPaymentBinding;
 import com.example.korailtalk.ticketing.data.TrainVO;
 

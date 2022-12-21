@@ -1,6 +1,6 @@
 package com.example.korailtalk.ticketing.data;
 
-import com.example.korailtalk.Util;
+import com.example.korailtalk.util.Util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

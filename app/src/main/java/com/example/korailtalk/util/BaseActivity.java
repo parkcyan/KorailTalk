@@ -1,4 +1,4 @@
-package com.example.korailtalk;
+package com.example.korailtalk.util;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +8,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.example.korailtalk.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 

@@ -1,6 +1,4 @@
-package com.example.korailtalk.api;
-
-import static android.content.ContentValues.TAG;
+package com.example.korailtalk.util;
 
 import android.util.Log;
 

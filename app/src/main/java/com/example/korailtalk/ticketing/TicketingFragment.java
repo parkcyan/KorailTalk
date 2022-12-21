@@ -1,7 +1,5 @@
 package com.example.korailtalk.ticketing;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -30,9 +27,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.korailtalk.MyDialog;
-import com.example.korailtalk.Util;
-import com.example.korailtalk.node.NodeRoom;
+import com.example.korailtalk.util.MyDialog;
+import com.example.korailtalk.util.Util;
+import com.example.korailtalk.room.node.NodeRoom;
 import com.example.korailtalk.MainActivity;
 import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.FragmentTicketingBinding;
