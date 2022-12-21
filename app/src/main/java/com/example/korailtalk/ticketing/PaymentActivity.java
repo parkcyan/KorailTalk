@@ -115,4 +115,9 @@ public class PaymentActivity extends BaseActivity {
         else b.llBottom.setVisibility(View.GONE);
     }
 
+    public void ticketingFinish() {
+        ticketingFinish = true;
+        finish();
+    }
+
 }

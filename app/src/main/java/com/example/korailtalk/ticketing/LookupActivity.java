@@ -52,10 +52,12 @@ public class LookupActivity extends BaseActivity {
         tsDate = (Timestamp) intent.getSerializableExtra("date");
         nodeRoom = new NodeRoom(this, getTrainHandler());
 
-        // api로부터 1월달 열차 가격이 잘 안나오는 문제 때문에 1개월전 데이터를 불러옴
-        tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, -1);
+        // api로부터 1월달 열차 가격이 잘 안나오는 문제 때문에 과거 데이터를 불러옴
+        tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, -1);
+        tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, -6);
         nodeRoom.getTrainFromApi(depNode, arrNode, tsDate);
-        tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, 1);
+        tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, 1);
+        tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, 6);
 
         b.tvDep.setText(intent.getStringExtra("depNode"));
         b.tvArr.setText(intent.getStringExtra("arrNode"));
@@ -84,6 +86,12 @@ public class LookupActivity extends BaseActivity {
     protected View getLayoutResource() {
         b = ActivityLookupBinding.inflate(getLayoutInflater());
         return b.getRoot();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ticketingFinish) finish();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////

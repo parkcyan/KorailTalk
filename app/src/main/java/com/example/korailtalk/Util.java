@@ -1,9 +1,6 @@
 package com.example.korailtalk;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,8 +14,7 @@ import java.util.Locale;
 
 public class Util {
 
-    private Util() {
-    }
+    private Util() {}
 
     public static String dateFormat(Timestamp time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
@@ -43,7 +39,7 @@ public class Util {
         return new Timestamp(System.currentTimeMillis());
     }
 
-    public static Timestamp getTimestmpFromDouble(double time) {
+    public static Timestamp getTimestampFromDouble(double time) {
         BigDecimal bd = BigDecimal.valueOf(time);
         StringBuilder ts = new StringBuilder();
         StringBuilder sb = new StringBuilder(bd.toPlainString());

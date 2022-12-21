@@ -1,11 +1,12 @@
 package com.example.korailtalk.ticket;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Ticket {
-    @PrimaryKey
+    @PrimaryKey @NonNull
     String ticketingDate; // 예매일자 Timestamp
     String tsDate; // 출발일자 Timestamp
     String depNode;

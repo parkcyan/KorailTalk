@@ -11,9 +11,7 @@ import androidx.fragment.app.Fragment;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    ActionBar actionBar;
-    TextView tv_toolbar;
+    protected static boolean ticketingFinish = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +21,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        toolbar = findViewById(R.id.toolbar);
-        tv_toolbar = findViewById(R.id.tv_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView tv_toolbar = findViewById(R.id.tv_toolbar);
         tv_toolbar.setText(setToolbarTitle());
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
     }

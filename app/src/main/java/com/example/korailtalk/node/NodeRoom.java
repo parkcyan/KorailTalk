@@ -149,7 +149,7 @@ public class NodeRoom {
                 ArrayList<TrainVO> trainList = new ArrayList<>();
                 for (int i = 0; i < trainArr.length(); i++) {
                     Train train = new Gson().fromJson(trainArr.getJSONObject(i).toString(), Train.class);
-                    if (Util.getTimestmpFromDouble(train.getDepplandtime()).getTime() > tsDate.getTime()) {
+                    if (Util.getTimestampFromDouble(train.getDepplandtime()).getTime() > tsDate.getTime()) {
                         trainList.add(new TrainVO(train));
                     }
                 }
