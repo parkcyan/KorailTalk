@@ -5,7 +5,7 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.korailtalk.checkTicket.CheckTicketFragment;
+import com.example.korailtalk.checkticket.CheckTicketFragment;
 import com.example.korailtalk.databinding.ActivityMainBinding;
 import com.example.korailtalk.ticketing.TicketingFragment;
 import com.example.korailtalk.util.BaseActivity;
@@ -47,8 +47,11 @@ public class MainActivity extends BaseActivity {
                     checkTicketFragment = new CheckTicketFragment();
                     fragments[3] = checkTicketFragment;
                     addFragment(R.id.container_main, checkTicketFragment);
+                    changeFragment(3);
+                } else  {
+                    changeFragment(3);
+                    checkTicketFragment.refreshTicketRv();
                 }
-                if (checkTicketFragment != null) changeFragment(3);
             }
             return true;
         });

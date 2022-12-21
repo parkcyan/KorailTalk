@@ -4,8 +4,12 @@ import static android.content.ContentValues.TAG;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,13 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.korailtalk.util.MyDialog;
+import com.example.korailtalk.room.ticket.Ticket;
+import com.example.korailtalk.room.ticket.TicketRoom;
+import com.example.korailtalk.util.KtDialog;
 import com.example.korailtalk.util.Util;
 import com.example.korailtalk.databinding.FragmentPaymentBinding;
 import com.example.korailtalk.ticketing.data.TrainVO;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class PaymentFragment extends Fragment {
 
@@ -28,22 +36,29 @@ public class PaymentFragment extends Fragment {
     private EditText[] etArr;
     private final int[] maxLength = {4, 4, 4, 4, 2, 4, 2, 6};
     private Timestamp tsDate;
+    private TicketRoom ticketRoom;
+    private TrainVO train;
+    private Bundle bundle;
+    private boolean specialSeat;
+    private int qty = 0;
+    private int[] qtyArr;
+    private String ticketNum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         b = FragmentPaymentBinding.inflate(inflater, container, false);
-        Bundle bundle = getArguments();
+        bundle = getArguments();
+        ticketRoom = new TicketRoom(getContext(), getTicketHandler());
 
-        TrainVO train = (TrainVO) bundle.getSerializable("train");
-        boolean specialSeat = bundle.getBoolean("special");
-        int[] qtyArr = bundle.getIntArray("qtyArr");
+        train = (TrainVO) bundle.getSerializable("train");
+        specialSeat = bundle.getBoolean("special");
+        qtyArr = bundle.getIntArray("qtyArr");
         tsDate = (Timestamp) bundle.getSerializable("tsDate");
 
         b.tlMethod.addTab(b.tlMethod.newTab().setText("카드결제"));
         b.tlMethod.addTab(b.tlMethod.newTab().setText("간편결제"));
 
-        int qty = 0;
         for (int i : qtyArr) qty += i;
         DecimalFormat df = new DecimalFormat("###,###원");
 
@@ -67,6 +82,10 @@ public class PaymentFragment extends Fragment {
             etArr[i].addTextChangedListener(setTextWatcher(i));
         }
 
+        Random rand = new Random();
+        ticketNum = (rand.nextInt(10000) + 80000) + "-" + (rand.nextInt(1000) + 1000) +
+                "-" + (rand.nextInt(10000) + 10000) + "-" + (rand.nextInt(10) + 10);
+
         return b.getRoot();
     }
 
@@ -74,6 +93,17 @@ public class PaymentFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         b = null;
+    }
+
+    private Handler getTicketHandler() {
+        return new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                if (msg.what == TicketRoom.INSERT_TICKET_SUCCESS) {
+                    ((PaymentActivity) getActivity()).ticketingFinish();
+                }
+            }
+        };
     }
 
     private TextWatcher setTextWatcher(int index) {
@@ -113,7 +143,6 @@ public class PaymentFragment extends Fragment {
             paymentError("유효기간 '연도'를 정확히 입력해주세요. ", b.etCardvaliyear);
             return;
         }
-        Log.d(TAG, "payment: " + year + "-" + month + "-01 00:00:00");
         if (tsDate.getTime() > Timestamp.valueOf(year + "-" + month + "-01 00:00:00").getTime()) {
             paymentError("유효기간을 잘못 입력하셨거나,\n유효기간이 만료된 카드입니다.");
             return;
@@ -138,17 +167,25 @@ public class PaymentFragment extends Fragment {
             paymentError("개인정보 수집 및 이용동의에 동의하시기\n바랍니다.");
             return;
         }
-        ((PaymentActivity) getActivity()).ticketingFinish();
-
+        String ticketKind;
+        if (qtyArr[0] != 0) ticketKind = "어른";
+        else if (qtyArr[3] != 0 || qtyArr[4]!= 0 || qtyArr[5]!= 0) ticketKind = "어른(할인)";
+        else ticketKind = "어린이";
+        Ticket ticket = new Ticket(Util.getCurrentTime().toString(), tsDate.toString(),
+                train.getDepplacename(), train.getArrplacename(), train.getDepplandtime(),
+                train.getArrplandtime(), train.getTraingradename() + " " + train.getTrainno(),
+                bundle.getString("trainNum"), bundle.getString("seat"), specialSeat, ticketKind,
+                ticketNum, qtyArr);
+        ticketRoom.addTicket(ticket);
     }
-    // 개인정보 수집 및 이용동의에 동의하시기 // 바랍니다.
+
     private void paymentError(String content) {
-        new MyDialog(getContext(), getLayoutInflater(), "이용안내",
+        new KtDialog(getContext(), getLayoutInflater(), "이용안내",
                 content).setPurple().show();
     }
 
     private void paymentError(String content, EditText editText) {
-        new MyDialog(getContext(), getLayoutInflater(), "이용안내",
+        new KtDialog(getContext(), getLayoutInflater(), "이용안내",
                 content).setPurple().show();
         editText.requestFocus();
     }

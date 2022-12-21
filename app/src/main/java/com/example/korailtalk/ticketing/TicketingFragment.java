@@ -27,7 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.korailtalk.util.MyDialog;
+import com.example.korailtalk.util.KtDialog;
 import com.example.korailtalk.util.Util;
 import com.example.korailtalk.room.node.NodeRoom;
 import com.example.korailtalk.MainActivity;
@@ -413,7 +413,7 @@ public class TicketingFragment extends Fragment {
         nowDateStr.replace(14, dateStr.length(), "00:00");
         Timestamp temp = Timestamp.valueOf(dateStr.toString());
         if (temp.getTime() < Timestamp.valueOf(nowDateStr.toString()).getTime()) {
-            new MyDialog(context, getLayoutInflater(),
+            new KtDialog(context, getLayoutInflater(),
                     "이용안내", "현재 시간 이전은 입력이 불가능합니다.").show();
             return false;
         } else if (temp.getTime() == Timestamp.valueOf(nowDateStr.toString()).getTime()) {
@@ -432,10 +432,10 @@ public class TicketingFragment extends Fragment {
     private View.OnClickListener operateQty(int index, boolean plus) {
         return v -> {
             if (index == 2 && plus && getCompanionQty() == 0) {
-                new MyDialog(context, getLayoutInflater(), "이용안내",
+                new KtDialog(context, getLayoutInflater(), "이용안내",
                         "유아(만 6세 미만)는 반드시 보호자를 함께 선택해야 합니다.").show();
             } else if (index != 1 && index != 2 && !plus && qtyArr[2] >= 1 && getCompanionQty() == 1) {
-                new MyDialog(context, getLayoutInflater(), "이용안내",
+                new KtDialog(context, getLayoutInflater(), "이용안내",
                         "유아(만 6세 미만)는 반드시 보호자를 함께 선택해야 합니다.").show();
             } else {
                 QtySet qtySet = qtyList.get(index);
@@ -474,7 +474,7 @@ public class TicketingFragment extends Fragment {
             public void onClick(View view) {
                 if (qty != 0) {
                     if (b.tvDep.getText().toString().equals(b.tvArr.getText().toString())) {
-                        new MyDialog(context, getLayoutInflater(), "이용안내", "출발역과 도착역이 같습니다.\n다시 확인해주세요.")
+                        new KtDialog(context, getLayoutInflater(), "이용안내", "출발역과 도착역이 같습니다.\n다시 확인해주세요.")
                                 .show();
                     } else {
                         Intent intent = new Intent(getActivity(), LookupActivity.class);

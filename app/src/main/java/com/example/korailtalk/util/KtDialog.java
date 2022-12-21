@@ -10,14 +10,14 @@ import androidx.core.content.ContextCompat;
 import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.DialogMainBinding;
 
-public class MyDialog {
+public class KtDialog {
 
     DialogMainBinding b;
     Dialog dialog;
     String title, content;
     Context context;
 
-    public MyDialog(Context context, LayoutInflater inflater, String title, String content) {
+    public KtDialog(Context context, LayoutInflater inflater, String title, String content) {
         this.context = context;
         dialog = new Dialog(context);
         b = DialogMainBinding.inflate(inflater);
@@ -36,7 +36,7 @@ public class MyDialog {
         b.tvConfirm.setOnClickListener(v -> dialog.dismiss());
     }
 
-    public MyDialog setPurple() {
+    public KtDialog setPurple() {
         b.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.purple));
         b.tvConfirm.setBackgroundColor(ContextCompat.getColor(context, R.color.purple3));
         return this;

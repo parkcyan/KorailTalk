@@ -39,17 +39,13 @@ public class CheckFragment extends Fragment {
         b.tvDeptime.setText(train.getDepplandtime());
         b.tvArrtime.setText(train.getArrplandtime());
 
-        Random rand = new Random();
-        int trainIndex = rand.nextInt(7) + 1;
-        int seatIndex = rand.nextInt(14) + 1;
-        String tvSeat = trainIndex + "호차 " + seatIndex + "A";
-
+        String tvSeat = bundle.getString("trainNum") + "호차 " + bundle.getString("seat") + "A";
         int qty = 0;
         for (int i : qtyArr) qty += i;
-        DecimalFormat df = new DecimalFormat("###,###원");
         if (qty > 1) tvSeat = tvSeat + " 외 " + (qty - 1) + "석";
         b.tvSeat.setText(tvSeat);
 
+        DecimalFormat df = new DecimalFormat("###,###원");
         int charge = specialSeat ? Util.roundCharge(train.getCharge() * 1.4) : train.getCharge();
         int totalCharge = charge * qty;
         int discountCharge = bundle.getInt("discountCharge");

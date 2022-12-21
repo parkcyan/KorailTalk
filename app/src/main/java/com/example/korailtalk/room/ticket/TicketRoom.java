@@ -8,9 +8,13 @@ import android.util.Log;
 
 import com.example.korailtalk.room.KtRoom;
 
+import java.util.ArrayList;
+
 public class TicketRoom {
 
     public static final int GET_TICKET_SUCCESS = 3;
+    public static final int GET_LIST_TICKETS = 1;
+    public static final int INSERT_TICKET_SUCCESS = 1;
 
     private final KtRoom room;
     private final TicketDAO ticketDAO;
@@ -34,6 +38,20 @@ public class TicketRoom {
                     Thread.currentThread().interrupt();
                 }
             }
+        }).start();
+    }
+
+    public void addTicket(Ticket ticket) {
+        new Thread(() -> {
+           ticketDAO.insert(ticket);
+           handler.sendMessage(handler.obtainMessage(INSERT_TICKET_SUCCESS, 1));
+        }).start();
+    }
+
+    public void getTickets() {
+        new Thread(() -> {
+            ArrayList<Ticket> ticketList = (ArrayList<Ticket>) ticketDAO.getTickets();
+            handler.sendMessage(handler.obtainMessage(GET_LIST_TICKETS, ticketList));
         }).start();
     }
 

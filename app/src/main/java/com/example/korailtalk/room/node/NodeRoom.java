@@ -25,7 +25,7 @@ import java.util.Arrays;
 public class NodeRoom {
 
     public static final int GET_NODE_SUCCESS = 1;
-    public static final int GET_LIST_FOR_RV = 2;
+    public static final int GET_LIST_NODES = 2;
 
     public static final int SEARCH_SUCCESS = 1;
 
@@ -120,7 +120,7 @@ public class NodeRoom {
                 }
             }
             Log.d(TAG, "nodeRoom: GET_LIST_FOR_RV");
-            handler.sendMessage(handler.obtainMessage(GET_LIST_FOR_RV, nodeList));
+            handler.sendMessage(handler.obtainMessage(GET_LIST_NODES, nodeList));
         }).start();
     }
 

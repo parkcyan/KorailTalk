@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == NodeRoom.GET_NODE_SUCCESS) nodeRoom.getNodeForRv();
-                else if (msg.what == NodeRoom.GET_LIST_FOR_RV) {
+                else if (msg.what == NodeRoom.GET_LIST_NODES) {
                     intent = new Intent(SplashActivity.this, MainActivity.class);
                     intent.putExtra("nodeList", (ArrayList<NodeVO>) msg.obj);
                     ticketRoom.checkTicketTable();

@@ -12,6 +12,7 @@ import com.example.korailtalk.ticketing.data.TrainVO;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.Random;
 
 public class PaymentActivity extends BaseActivity {
 
@@ -40,6 +41,7 @@ public class PaymentActivity extends BaseActivity {
         Bundle bundle = setBundle();
         checkFragment.setArguments(bundle);
         paymentFragment.setArguments(bundle);
+
         addFragment(R.id.container_payment, checkFragment);
         addFragment(R.id.container_payment, paymentFragment);
         hideFragment(paymentFragment);
@@ -69,6 +71,9 @@ public class PaymentActivity extends BaseActivity {
         bundle.putSerializable("train", train);
         bundle.putSerializable("tsDate", tsDate);
         bundle.putInt("discountCharge", getDiscountCharge());
+        Random rand = new Random();
+        bundle.putString("trainNum", String.valueOf(rand.nextInt(7) + 1));
+        bundle.putString("seat", String.valueOf(rand.nextInt(14) + 1));
         return bundle;
     }
 
