@@ -16,8 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
+import com.example.korailtalk.R;
 import com.example.korailtalk.room.ticket.Ticket;
 import com.example.korailtalk.room.ticket.TicketRoom;
 import com.example.korailtalk.util.KtDialog;
@@ -55,10 +58,12 @@ public class PaymentFragment extends Fragment {
         specialSeat = bundle.getBoolean("special");
         qtyArr = bundle.getIntArray("qtyArr");
         tsDate = (Timestamp) bundle.getSerializable("tsDate");
-
+        
+        // 탭
         b.tlMethod.addTab(b.tlMethod.newTab().setText("카드결제"));
         b.tlMethod.addTab(b.tlMethod.newTab().setText("간편결제"));
-
+        
+        // 티켓정보
         for (int i : qtyArr) qty += i;
         DecimalFormat df = new DecimalFormat("###,###원");
 
@@ -69,10 +74,11 @@ public class PaymentFragment extends Fragment {
 
         String discountStr = df.format(totalCharge) + " (총 " + df.format(totalCharge - discountCharge) + " 할인)";
         b.tvDiscount.setText(discountStr);
-
+        
+        // 결제 입력창
         etArr = new EditText[]{b.etCardnum1, b.etCardnum2, b.etCardnum3, b.etCardnum4, b.etCardvalimonth, b.etCardvaliyear,
                 b.etCardpw, b.etIdentifynum};
-
+        
         b.llClear.setOnClickListener(v -> {
             for (EditText et : etArr) et.setText("");
             etArr[0].requestFocus();
@@ -81,7 +87,34 @@ public class PaymentFragment extends Fragment {
         for (int i = 0; i < etArr.length; i++) {
             etArr[i].addTextChangedListener(setTextWatcher(i));
         }
+        
+        b.rbNormal.setChecked(true);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.mycard, android.R.layout.simple_spinner_dropdown_item);
+        b.spMycard.setAdapter(adapter);
+        adapter = ArrayAdapter.createFromResource(getContext(), R.array.installment,
+                android.R.layout.simple_spinner_dropdown_item);
+        b.spInstallment.setAdapter(adapter);
+        b.spMycard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) b.llClear.performClick();
+                else if (position == 1) {
+                    b.etCardnum1.setText("1234");
+                    b.etCardnum2.setText("1234");
+                    b.etCardnum3.setText("1234");
+                    b.etCardnum4.setText("1234");
+                    b.etCardvalimonth.setText("12");
+                    b.etCardvaliyear.setText("2028");
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        
+        // 티켓번호 랜덤 생성
         Random rand = new Random();
         ticketNum = (rand.nextInt(10000) + 80000) + "-" + (rand.nextInt(1000) + 1000) +
                 "-" + (rand.nextInt(10000) + 10000) + "-" + (rand.nextInt(10) + 10);

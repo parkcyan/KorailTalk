@@ -24,4 +24,21 @@
         <item>환승</item>
 
     </string-array>
+
+    <string-array name="mycard">
+        <item>-</item>
+        <item>신한</item>
+
+    </string-array>
+
+    <string-array name="installment">
+        <item>일시불</item>
+        <item>1개월</item>
+        <item>2개월</item>
+        <item>3개월</item>
+        <item>6개월</item>
+
+    </string-array>
+
+
 </resources>

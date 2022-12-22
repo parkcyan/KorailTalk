@@ -20,6 +20,7 @@ import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.FragmentCheckticketBinding;
 import com.example.korailtalk.room.ticket.Ticket;
 import com.example.korailtalk.room.ticket.TicketRoom;
+import com.example.korailtalk.util.KtAlertDialog;
 import com.example.korailtalk.util.Util;
 
 import java.util.ArrayList;
@@ -54,17 +55,32 @@ public class CheckTicketFragment extends Fragment {
                     ArrayList<Ticket> ticketList = (ArrayList<Ticket>) msg.obj;
                     Util.setRecyclerView(context, b.rvCheckticket, new CheckTicketAdapter(
                             CheckTicketFragment.this, ticketList), true);
-                    b.rvCheckticket.post(() -> b.rlProgress.setVisibility(View.GONE));
-                    if (b.tlTicketkind.getTabCount() != 2) {
-                        b.tlTicketkind.addTab(b.tlTicketkind.newTab().setText("승차권 (" + ticketList.size() + ")"));
-                        b.tlTicketkind.addTab(b.tlTicketkind.newTab().setText("정기권 · 패스"));
-                    }
-                }
+                    b.rvCheckticket.post(() -> {
+                        b.rlProgress.setVisibility(View.GONE);
+                        if (ticketList.size() == 0) b.clNoticket.setVisibility(View.VISIBLE);
+                    });
+                    b.tlTicketkind.getTabAt(0).setText("승차권 (" + ticketList.size() + ")");
+                } else if (msg.what == TicketRoom.DELETE_TICKET_SUCCESS) refreshTicketRv();
             }
         };
     }
 
+    public void refund(Ticket ticket) {
+        new KtAlertDialog(context, getLayoutInflater(), "이용안내", getString(R.string.refund), new KtAlertDialog.OnAlertDialogClickListener() {
+            @Override
+            public void setOnClickYes(KtAlertDialog dialog) {
+                ticketRoom.deleteTicket(ticket);
+                dialog.dismiss();
+            }
+            @Override
+            public void setOnClickNo(KtAlertDialog dialog) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
+
     public void refreshTicketRv() {
+        b.clNoticket.setVisibility(View.GONE);
         b.rlProgress.setVisibility(View.VISIBLE);
         ticketRoom.getTickets();
     }

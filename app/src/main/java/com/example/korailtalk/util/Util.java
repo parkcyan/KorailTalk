@@ -31,10 +31,6 @@ public class Util {
         return Integer.parseInt(sdf.format(time));
     }
 
-    public static int roundCharge(double number) {
-        return (int) Math.round(number / 100.0) * 100;
-    }
-
     public static Timestamp getCurrentTime() {
         return new Timestamp(System.currentTimeMillis());
     }
@@ -57,9 +53,13 @@ public class Util {
         return new Timestamp(cal.getTime().getTime());
     }
 
-    public static void setRecyclerView(Context context, RecyclerView rv, RecyclerView.Adapter<?> adapter, boolean orientation) {
+    public static int roundCharge(double number) {
+        return (int) Math.round(number / 100.0) * 100;
+    }
+
+    public static void setRecyclerView(Context context, RecyclerView rv, RecyclerView.Adapter<?> adapter, boolean vertical) {
         RecyclerView.LayoutManager lm;
-        if (orientation) lm = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        if (vertical) lm = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         else lm = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rv.setAdapter(adapter);
         rv.setLayoutManager(lm);

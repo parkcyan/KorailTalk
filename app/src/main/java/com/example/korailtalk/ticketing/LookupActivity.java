@@ -1,5 +1,7 @@
 package com.example.korailtalk.ticketing;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -52,7 +55,7 @@ public class LookupActivity extends BaseActivity {
         tsDate = (Timestamp) intent.getSerializableExtra("date");
         nodeRoom = new NodeRoom(this, getTrainHandler());
 
-        // api로부터 1월달 열차 가격이 잘 안나오는 문제 때문에 과거 데이터를 불러옴
+        // api로부터 최근 열차 가격이 잘 안나오는 문제 때문에 과거(1년 6개월전) 데이터를 불러옴
         tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, -1);
         tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, -6);
         nodeRoom.getTrainFromApi(depNode, arrNode, tsDate);
@@ -64,6 +67,11 @@ public class LookupActivity extends BaseActivity {
         b.tvDate.setText(Util.dateFormat(tsDate, "yyyy년 M월 d일 (E)"));
 
         // 이전날, 다음날 조회
+        setTvNextDayBottomText();
+
+        b.tvNextday.setOnClickListener(changeDate(true));
+        b.tvPreday.setOnClickListener(changeDate(false));
+        b.tvNextdaybottom.setOnClickListener(changeDate(true));
 
         // Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.grade, android.R.layout.simple_spinner_dropdown_item);
@@ -103,13 +111,16 @@ public class LookupActivity extends BaseActivity {
                 if (msg.what == NodeRoom.GET_TRAIN_SUCCESS) {
                     trainList = (ArrayList<TrainVO>) msg.obj;
                     if (trainList.isEmpty()) {
+                        b.svTrain.setVisibility(View.GONE);
                         b.rlProgress.setVisibility(View.GONE);
                         b.clNottrain.setVisibility(View.VISIBLE);
                     } else {
                         Util.setRecyclerView(context, b.rvTrain, new TrainAdapter(activity, trainList), true);
+                        b.svTrain.setVisibility(View.VISIBLE);
                         b.rvTrain.post(() -> b.rlProgress.setVisibility(View.GONE));
                     }
                 } else if (msg.what == NodeRoom.GET_TRAIN_FAILED) {
+                    b.svTrain.setVisibility(View.GONE);
                     b.rlProgress.setVisibility(View.GONE);
                     b.clNottrain.setVisibility(View.VISIBLE);
                 }
@@ -141,6 +152,33 @@ public class LookupActivity extends BaseActivity {
                 startActivity(intent);
             }
         };
+    }
+
+    private View.OnClickListener changeDate(boolean next) {
+        return view -> {
+            b.svTrain.setVisibility(View.GONE);
+            b.rlProgress.setVisibility(View.VISIBLE);
+            tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, -1);
+            tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, -6);
+            if (next) tsDate = Util.timestampOperator(tsDate, Calendar.DATE, 1);
+            else tsDate = Util.timestampOperator(tsDate, Calendar.DATE, -1);
+            StringBuilder sb = new StringBuilder(tsDate.toString());
+            sb.replace(11, sb.length(), "00:00:00");
+            tsDate = Timestamp.valueOf(sb.toString());
+
+            nodeRoom.getTrainFromApi(depNode, arrNode, tsDate);
+            tsDate = Util.timestampOperator(tsDate, Calendar.YEAR, 1);
+            tsDate = Util.timestampOperator(tsDate, Calendar.MONTH, 6);
+            setTvNextDayBottomText();
+            b.tvDate.setText(Util.dateFormat(tsDate, "yyyy년 M월 d일 (E)"));
+
+        };
+    }
+
+    private void setTvNextDayBottomText() {
+        String tvNextdaybottom = "다음날 (" +
+                Util.dateFormat(Util.timestampOperator(tsDate, Calendar.DATE, 1), "M월 d일") + ") 조회하기";
+        b.tvNextdaybottom.setText(tvNextdaybottom);
     }
 
 }

@@ -9,12 +9,11 @@ import androidx.room.TypeConverters;
 
 import com.example.korailtalk.room.node.Node;
 import com.example.korailtalk.room.node.NodeDAO;
-import com.example.korailtalk.room.ticket.QtyArrConverter;
 import com.example.korailtalk.room.ticket.Ticket;
 import com.example.korailtalk.room.ticket.TicketDAO;
 
 @Database(entities = {Node.class, Ticket.class}, version = 1)
-@TypeConverters(QtyArrConverter.class)
+@TypeConverters(ArrConverter.class)
 public abstract class KtRoom extends RoomDatabase {
 
     private static KtRoom INSTANCE;

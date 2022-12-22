@@ -21,6 +21,7 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.TrainViewHol
     private ArrayList<TrainVO> trainList;
     private LayoutInflater inflater;
     private int selectedPosition = -1;
+    private boolean specialSeat = false;
 
     public TrainAdapter(LookupActivity activity, ArrayList<TrainVO> trainList) {
         this.activity = activity;
@@ -56,8 +57,13 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.TrainViewHol
         } else holder.b.tvCharges.setText(trainList.get(position).getAdultscharge());
         if (selectedPosition == position) {
             holder.itemView.setBackground(ContextCompat.getDrawable(activity, R.drawable.rectangle_selected));
-            holder.b.tvCharge.setBackground(ContextCompat.getDrawable(activity, R.drawable.round_background_main_selected));
-            holder.b.tvCharges.setBackground(ContextCompat.getDrawable(activity, R.drawable.round_background_main_selected));
+            if (specialSeat) {
+                holder.b.tvCharge.setBackground(ContextCompat.getDrawable(activity, R.drawable.round_background_main_main7));
+                holder.b.tvCharges.setBackground(ContextCompat.getDrawable(activity, R.drawable.round_background_main_main6));
+            } else {
+                holder.b.tvCharge.setBackground(ContextCompat.getDrawable(activity, R.drawable.round_background_main_main6));
+                holder.b.tvCharges.setBackground(ContextCompat.getDrawable(activity, R.drawable.round_background_main_main7));
+            }
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(activity, R.color.white));
             if (train.getAdultcharge().equals("매진")) {
@@ -97,6 +103,7 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.TrainViewHol
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                         selectedPosition = getAdapterPosition();
+                        specialSeat = false;
                         activity.trainSelect(trainList.get(getAdapterPosition()), false);
                         notifyDataSetChanged();
                     }
@@ -107,6 +114,7 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.TrainViewHol
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                         selectedPosition = getAdapterPosition();
+                        specialSeat = true;
                         activity.trainSelect(trainList.get(getAdapterPosition()), true);
                         notifyDataSetChanged();
                     }

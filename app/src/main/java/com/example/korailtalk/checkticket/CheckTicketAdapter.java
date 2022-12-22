@@ -80,6 +80,8 @@ public class CheckTicketAdapter extends RecyclerView.Adapter<CheckTicketAdapter.
         public CheckTicketViewHolder(@NonNull View v) {
             super(v);
             b = RvTicketBinding.bind(v);
+            b.tvRefund.setOnClickListener(v1 ->
+                    fragment.refund(ticketList.get(getAdapterPosition())));
         }
     }
 }

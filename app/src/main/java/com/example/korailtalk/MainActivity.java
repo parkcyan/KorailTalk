@@ -30,6 +30,8 @@ public class MainActivity extends BaseActivity {
 
         fragments = new Fragment[]{ticketingFragment, null, null, null};
 
+        b.toolbar.ivBack.setOnClickListener(v -> b.bnvMain.bnvMain.setSelectedItemId(R.id.bnv_main_tic));
+
         setBnv();
     }
 
@@ -52,6 +54,7 @@ public class MainActivity extends BaseActivity {
                     changeFragment(3);
                     checkTicketFragment.refreshTicketRv();
                 }
+                b.toolbar.ivBack.setVisibility(View.INVISIBLE);
             }
             return true;
         });
@@ -80,6 +83,13 @@ public class MainActivity extends BaseActivity {
             ticketingFinish = false;
             b.bnvMain.bnvMain.setSelectedItemId(R.id.bnv_main_checktic);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (b.bnvMain.bnvMain.getSelectedItemId() != 0) {
+            b.bnvMain.bnvMain.setSelectedItemId(R.id.bnv_main_tic);
+        } else super.onBackPressed();
     }
 
     private void changeFragment(int index) {

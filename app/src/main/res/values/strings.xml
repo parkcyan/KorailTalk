@@ -3,4 +3,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="collectpersonalinfo"><u>개인정보 수집 및 이용동의</u></string>
+    <string name="refund">승차권 반환수수료는 0원입니다.\n반환하시겠습니까?\n\n1. 신용카드는 반환일로부터 약 7일 이후 결제가 취소되고 정확한 환불일자는 고객님의 결제일에 따라 다르므로 해당 카드사에 문의하여 주시기 바랍니다.\n\n2. 다만 여러장을 구입하고 일부만 취소시에는 최대 2주가 소요될 수 있습니다.\n\n하단에 [반환요청] 버튼을 눌러야 정상적으로 반환할 수 있습니다.</string>
 </resources>

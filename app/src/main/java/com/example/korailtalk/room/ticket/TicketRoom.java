@@ -12,9 +12,14 @@ import java.util.ArrayList;
 
 public class TicketRoom {
 
+    // SplashActivity
     public static final int GET_TICKET_SUCCESS = 3;
+    // CheckTicketFragment
     public static final int GET_LIST_TICKETS = 1;
+    public static final int DELETE_TICKET_SUCCESS = 2;
+    // PaymentFragment
     public static final int INSERT_TICKET_SUCCESS = 1;
+
 
     private final KtRoom room;
     private final TicketDAO ticketDAO;
@@ -50,8 +55,21 @@ public class TicketRoom {
 
     public void getTickets() {
         new Thread(() -> {
-            ArrayList<Ticket> ticketList = (ArrayList<Ticket>) ticketDAO.getTickets();
-            handler.sendMessage(handler.obtainMessage(GET_LIST_TICKETS, ticketList));
+            try {
+                Thread.sleep(500);
+                ArrayList<Ticket> ticketList = (ArrayList<Ticket>) ticketDAO.getTickets();
+                handler.sendMessage(handler.obtainMessage(GET_LIST_TICKETS, ticketList));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+
+    public void deleteTicket(Ticket ticket) {
+        new Thread(() -> {
+            ticketDAO.delete(ticket);
+            handler.sendMessage(handler.obtainMessage(DELETE_TICKET_SUCCESS, 1));
         }).start();
     }
 
