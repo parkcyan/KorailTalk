@@ -38,6 +38,10 @@ public class PaymentActivity extends BaseActivity {
         train = (TrainVO) intent.getSerializableExtra("train");
         tsDate = (Timestamp) intent.getSerializableExtra("tsDate");
 
+        int sum = 0;
+        for (int i : qtyArr) sum += i;
+        b.tvQty.setText("총 " + sum + "명");
+
         Bundle bundle = setBundle();
         checkFragment.setArguments(bundle);
         paymentFragment.setArguments(bundle);

@@ -2,30 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/bnv_main_tic"
+        android:id="@+id/bnv_tic"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_image_24"
+        android:icon="@drawable/bnvitem1"
         android:title="승차권예매"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/bnv_main_seasontic"
+        android:id="@+id/bnv_seasontic"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_image_24"
+        android:icon="@drawable/bnvitem2"
         android:title="할인·정기권"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/bnv_main_goods"
+        android:id="@+id/bnv_tour"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_image_24"
+        android:icon="@drawable/bnvitem3"
         android:title="관광상품"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/bnv_main_checktic"
+        android:id="@+id/bnv_checktic"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_image_24"
+        android:icon="@drawable/bnvitem4"
         android:title="승차권확인"
         app:showAsAction="always"/>
 </menu>

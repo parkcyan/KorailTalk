@@ -319,6 +319,8 @@
         android:textSize="22dp"
         android:visibility="gone"/>
 
-    <include layout="@layout/bnv" />
+    <include
+        android:id="@+id/bnv"
+        layout="@layout/bnv" />
 
 </LinearLayout>

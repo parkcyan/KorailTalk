@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.korailtalk.MainActivity;
 import com.example.korailtalk.R;
 import com.example.korailtalk.databinding.FragmentCheckticketBinding;
 import com.example.korailtalk.room.ticket.Ticket;
@@ -38,6 +39,9 @@ public class CheckTicketFragment extends Fragment {
         context = getContext();
         ticketRoom = new TicketRoom(getContext(), getTicketHandler());
         ticketRoom.getTickets();
+
+        b.tvLookup.setOnClickListener(v -> ((MainActivity) getActivity()).onBackPressed());
+
         return b.getRoot();
     }
 
@@ -76,7 +80,7 @@ public class CheckTicketFragment extends Fragment {
             public void setOnClickNo(KtAlertDialog dialog) {
                 dialog.dismiss();
             }
-        }).show();
+        }).setYesTest("반환요청").setNoTest("반환취소").show();
     }
 
     public void refreshTicketRv() {

@@ -697,7 +697,6 @@
                         android:layout_gravity="center"
                         android:layout_weight="10"
                         android:background="@android:color/transparent"
-                        android:hint="역 명의 초성 또는 전체를 입력해 주세요."
                         android:imeOptions="actionDone"
                         android:maxLength="10"
                         android:singleLine="true"
@@ -729,7 +728,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_node"
                             android:layout_width="0dp"
-                            android:layout_height="1dp"
+                            android:layout_height="0dp"
                             android:layout_weight="12"
                             android:background="@color/whitesmoke"
                             android:nestedScrollingEnabled="false" />

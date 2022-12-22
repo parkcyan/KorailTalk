@@ -43,6 +43,16 @@ public class KtAlertDialog {
         return this;
     }
 
+    public KtAlertDialog setYesTest(String str) {
+        b.tvYes.setText(str);
+        return this;
+    }
+
+    public KtAlertDialog setNoTest(String str) {
+        b.tvNo.setText(str);
+        return this;
+    }
+
     public void show() {
         dialog.show();
     }

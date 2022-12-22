@@ -14,6 +14,7 @@ import com.example.korailtalk.R;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected static boolean ticketingFinish = false;
+    protected static int bnvClickFromLookup = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        TextView tv_toolbar = findViewById(R.id.tv_toolbar);
-        tv_toolbar.setText(setToolbarTitle());
+        TextView tvToolbar = findViewById(R.id.tv_toolbar);
+        tvToolbar.setText(setToolbarTitle());
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);

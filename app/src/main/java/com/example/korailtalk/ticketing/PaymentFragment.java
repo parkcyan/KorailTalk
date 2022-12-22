@@ -87,7 +87,8 @@ public class PaymentFragment extends Fragment {
         for (int i = 0; i < etArr.length; i++) {
             etArr[i].addTextChangedListener(setTextWatcher(i));
         }
-        
+
+        // 자주 쓰는 티켓, 할부 Spinner 설정
         b.rbNormal.setChecked(true);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.mycard, android.R.layout.simple_spinner_dropdown_item);
@@ -218,8 +219,7 @@ public class PaymentFragment extends Fragment {
     }
 
     private void paymentError(String content, EditText editText) {
-        new KtDialog(getContext(), getLayoutInflater(), "이용안내",
-                content).setPurple().show();
+        this.paymentError(content);
         editText.requestFocus();
     }
 }

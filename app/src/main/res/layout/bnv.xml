@@ -1,12 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.bottomnavigation.BottomNavigationView
+<LinearLayout
+    android:id="@+id/ll_bnv"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bnv_main"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_gravity="bottom"
-    android:padding="5dp"
-    app:labelVisibilityMode="labeled"
-    app:menu="@menu/menu_mainbnv"
-/>
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:background="@color/gray">
+
+    <RelativeLayout
+        android:id="@+id/rl_tic"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:layout_marginTop="1dp">
+
+        <ImageView
+            android:id="@+id/iv_tic"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:src="@drawable/bnvitem1_selected"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tv_tic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="승차권예매"
+            android:textSize="11dp"
+            android:textColor="@color/bnvcolor"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="2dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_seasontic"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:layout_marginTop="1dp">
+
+        <ImageView
+            android:id="@+id/iv_seasontic"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:src="@drawable/bnvitem2"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tv_seasontic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="할인 · 정기권"
+            android:textSize="11dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="2dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_tour"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:layout_marginTop="1dp">
+
+        <ImageView
+            android:id="@+id/iv_tour"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/bnvitem3"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tv_tour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="관광상품"
+            android:textSize="11dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="2dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_checktic"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:layout_marginTop="1dp">
+
+        <ImageView
+            android:id="@+id/iv_checktic"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:src="@drawable/bnvitem4"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tv_checktic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="승차권확인"
+            android:textSize="11dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="2dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

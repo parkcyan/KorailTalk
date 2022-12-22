@@ -165,6 +165,31 @@ public class NodeRoom {
         }).start();
     }
 
+    public void getTrainFromApi(String depNode, String arrNode, Timestamp tsDate, String trainGrade) {
+        new Thread(() -> {
+            String[] nodeidArr = new String[2];
+            nodeidArr[0] = nodeDAO.getNodeid(depNode);
+            nodeidArr[1] = nodeDAO.getNodeid(arrNode);
+            try {
+                JSONArray trainArr = apiExplorer.getTrain(nodeidArr[0], nodeidArr[1], Util.dateFormatInt(tsDate, "yyyyMMdd"), 1);
+                ArrayList<TrainVO> trainList = new ArrayList<>();
+                for (int i = 0; i < trainArr.length(); i++) {
+                    Train train = new Gson().fromJson(trainArr.getJSONObject(i).toString(), Train.class);
+                    if (Util.getTimestampFromDouble(train.getDepplandtime()).getTime() > tsDate.getTime()
+                            && train.getTraingradename().contains(trainGrade)) {
+                        trainList.add(new TrainVO(train));
+                    }
+                }
+                handler.sendMessage(handler.obtainMessage(GET_TRAIN_SUCCESS, trainList));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            } catch (JSONException e) {
+                handler.sendMessage(handler.obtainMessage(GET_TRAIN_FAILED, null));
+            }
+        }).start();
+    }
+
     private boolean hasTable() {
         return nodeDAO.hasTable() != null;
     }

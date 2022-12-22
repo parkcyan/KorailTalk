@@ -38,7 +38,6 @@ import com.example.korailtalk.ticketing.adapter.NodeAdapter;
 import com.example.korailtalk.ticketing.adapter.TimeAdapter;
 import com.example.korailtalk.ticketing.data.NodeVO;
 import com.example.korailtalk.ticketing.data.QtySet;
-import com.google.android.material.tabs.TabLayout;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -49,19 +48,18 @@ public class TicketingFragment extends Fragment {
     private TicketingFragment fragment;
     private FragmentTicketingBinding b;
     private Context context;
-    private boolean isRoundTrip = false;
-    private boolean isDepArr = true;
     private NodeRoom nodeRoom;
     private NodeAdapter adapter;
-    // sfl = search first letter
+    private boolean isDepSelected;
+    private int qty = 1;
+    private final ArrayList<QtySet> qtyList = new ArrayList<>();
+    private final int[] qtyArr = {1, 0, 0, 0, 0, 0};
+    // 역 선택창에서 첫째 글자의 자음을 선택해 스크롤 이동 (sfl = search first letter)
     private final ImageView[] ivSfl = new ImageView[15];
     private final TextView[] tvSfl = new TextView[15];
     private final int[] sflPosition = new int[15];
-    private int qty = 1;
-    private final ArrayList<QtySet> qtyList = new ArrayList<>();
     private final String[] sfl = {"가", "최", "주", "ㄱ", "ㄴ", "ㄷ", "ㅁ", "ㅂ",
             "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅌ", "ㅍ", "ㅎ"};
-    private final int[] qtyArr = {1, 0, 0, 0, 0, 0};
     private Timestamp tsDate = Util.getCurrentTime();
 
 
@@ -73,13 +71,11 @@ public class TicketingFragment extends Fragment {
         fragment = this;
         Bundle bundle = getArguments();
         ArrayList<NodeVO> nodeList = (ArrayList<NodeVO>) bundle.getSerializable("nodeList");
-
         nodeRoom = new NodeRoom(context, getNodeHandler());
 
         // 탭
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("편도"));
         b.tlRoundTrip.addTab(b.tlRoundTrip.newTab().setText("왕복"));
-        b.tlRoundTrip.addOnTabSelectedListener(onTabSelect());
 
         // 역 선택창
         b.llNodefold.setOnClickListener(view -> nodeFold());
@@ -88,12 +84,7 @@ public class TicketingFragment extends Fragment {
         b.rvNode.setItemViewCacheSize(30);
         Util.setRecyclerView(context, b.rvNode, adapter, true);
 
-        nodeExpand();
-        b.rvNode.post(() -> {
-            b.rvNode.getLayoutParams().height = b.llSfl.getHeight();
-            b.rvNode.setLayoutParams(b.rvNode.getLayoutParams());
-            nodeFold();
-        });
+
 
         int position = 0;
         for (int i = 0; i < nodeList.size(); i++) {
@@ -122,7 +113,7 @@ public class TicketingFragment extends Fragment {
         b.ivNodechange.setOnClickListener(onCityChange());
 
         // 출발일
-        setDate();
+        setDateText();
         b.llDate.setOnClickListener(optionClick());
 
         Calendar cal = Calendar.getInstance();
@@ -165,7 +156,7 @@ public class TicketingFragment extends Fragment {
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void setDate() {
+    private void setDateText() {
         b.tvDate.setText(Util.dateFormat(tsDate, "yyyy년 M월 d일 (E) HH:mm"));
     }
 
@@ -177,25 +168,6 @@ public class TicketingFragment extends Fragment {
                     adapter = new NodeAdapter(fragment, (ArrayList<NodeVO>) msg.obj);
                     Util.setRecyclerView(context, b.rvSearch, adapter, true);
                 }
-            }
-        };
-    }
-
-    private TabLayout.OnTabSelectedListener onTabSelect() {
-        return new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                isRoundTrip = tab.getPosition() == 1;
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
             }
         };
     }
@@ -221,13 +193,13 @@ public class TicketingFragment extends Fragment {
             ulClick.setLayoutParams(ulClick.getLayoutParams());
             ulNotClick.getLayoutParams().width = 0;
             ulNotClick.setLayoutParams(ulNotClick.getLayoutParams());
-            isDepArr = view.getId() == R.id.rl_dep;
+            isDepSelected = view.getId() == R.id.rl_dep;
             nodeExpand();
         };
     }
 
     public void citySelect(String node) {
-        if (isDepArr) b.tvDep.setText(node);
+        if (isDepSelected) b.tvDep.setText(node);
         else b.tvArr.setText(node);
         b.etNode.setText("");
         nodeFold();
@@ -360,6 +332,11 @@ public class TicketingFragment extends Fragment {
         b.llSelect.setVisibility(View.GONE);
         b.llNode.setVisibility(View.VISIBLE);
         ((MainActivity) getActivity()).showBnv(false);
+        b.rvNode.post(() -> {
+            b.rvNode.getLayoutParams().height = b.llSfl.getHeight();
+            b.rvNode.setLayoutParams(b.rvNode.getLayoutParams());
+            //nodeFold();
+        });
     }
 
     private View.OnClickListener optionClick() {
@@ -392,18 +369,20 @@ public class TicketingFragment extends Fragment {
 
     public void onDateClick(Timestamp date, int position) {
         if (position == 0) {
+            // 오늘 날짜를 선택시 시간대를 현재 시각에 맞춰 자동 선택
             int hour = Util.dateFormatInt(Util.getCurrentTime(), "H");
             ((LinearLayoutManager) b.rvTime.getLayoutManager()).scrollToPositionWithOffset(hour, 0);
             new Handler(Looper.getMainLooper()).postDelayed(
                     () -> b.rvTime.findViewHolderForAdapterPosition(hour).itemView.performClick(), 10);
         } else {
+            // 오늘 이후의 날짜를 선택시 시간대를 00시로 자동 선택
             b.rvTime.scrollToPosition(0);
             b.rvTime.post(() -> b.rvTime.findViewHolderForAdapterPosition(0).itemView.performClick());
         }
         StringBuilder dateStr = new StringBuilder(Util.dateFormat(date));
         dateStr.replace(11, dateStr.length(), "00:00:00");
         tsDate = Timestamp.valueOf(dateStr.toString());
-        setDate();
+        setDateText();
     }
 
     public boolean onTimeClick(String time) {
@@ -420,15 +399,16 @@ public class TicketingFragment extends Fragment {
             temp = Util.getCurrentTime();
         }
         tsDate = temp;
-        setDate();
+        setDateText();
         return true;
     }
 
+    // 보호자 수
     private int getCompanionQty() {
-        // 보호자
         return qtyArr[0] + qtyArr[3] + qtyArr[4] + qtyArr[5];
     }
 
+    // 유아는 보호자 없이 예매 불가
     private View.OnClickListener operateQty(int index, boolean plus) {
         return v -> {
             if (index == 2 && plus && getCompanionQty() == 0) {
